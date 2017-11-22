@@ -1,30 +1,36 @@
 # Service Fabric Extension for Visual Studio Code
 
-A [Visual Studio Code](https://code.visualstudio.com/) ex
+A [Visual Studio Code](https://code.visualstudio.com/) extension that provides support for building Service Fabric applications in Visual Studio Code.
+
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+* Create Service Fabric Applications (Java, C#, Container, Guest Executables)
+* Build Java and C# Service Fabric applications
+* Deploy applications to a local cluster
+* Publish applications to a remote cluster
+* Remove applications from a cluster
+* Debugging for Java and C# Service Fabric Applications
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+As VS Code is a lightweight editor, a number of dependencies must be first installed before Service Fabric applications can be created using VS Code.
+
+* [Install Visual Studio Code](https://code.visualstudio.com/)
+* [Install Node.js](https://nodejs.org/en/)
+* [Install Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
+* [Install Git](https://git-scm.com/)
+* Install Yeoman Generators
+```sh
+npm install -g yo
+npm install -g generator-azuresfjava
+npm install -g generator-azuresfcsharp
+```
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+#### Windows Only
 
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
+If you are using VS Code on Windows, a bash shell must be installed. Bash on Ubuntu (On Windows) can be installed by following these [instructions](https://msdn.microsoft.com/en-us/commandline/wsl/install_guide).
 
 ## Known Issues
 
