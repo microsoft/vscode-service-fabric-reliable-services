@@ -29,11 +29,8 @@ function buildGradleApplication() {
             vscode.window.showErrorMessage("A build.gradle file was not found in the workspace");
             return;
         }
-        //const relativeBuildPath = vscode.workspace.asRelativePath(uris[0].path).replace('build.gradle', '');
         const projectPath = uris[0].path.replace('build.gradle', '');
         let projectUri = vscode.Uri.parse(projectPath);
-        // Changes the directory of the workspace!
-        //vscode.commands.executeCommand('vscode.openFolder', projectUri);
         const terminal = vscode.window.createTerminal('ServiceFabric');
         terminal.sendText('gradle build ');
         terminal.show();

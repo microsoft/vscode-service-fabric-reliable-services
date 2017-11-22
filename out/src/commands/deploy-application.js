@@ -25,7 +25,6 @@ function deployApplication() {
 exports.deployApplication = deployApplication;
 function installApplication() {
     return __awaiter(this, void 0, void 0, function* () {
-        // Still need to determine how a cluster is selected: Using CLI : Publish Profile ??
         const uri = yield vscode.workspace.findFiles('**/install.sh');
         if (uri.length < 1) {
             vscode.window.showErrorMessage("An install.sh file was not found in the workspace");
