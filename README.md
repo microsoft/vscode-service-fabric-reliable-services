@@ -32,6 +32,17 @@ npm install -g generator-azuresfcsharp
 
 If you are using VS Code on Windows, a bash shell must be installed. Bash on Ubuntu (On Windows) can be installed by following these [instructions](https://msdn.microsoft.com/en-us/commandline/wsl/install_guide).
 
+## Quickstart
+
+#### Setup (Debug)
+
+1. Open a bash shell and navigate to the directory where the extension folder is stored.
+2. Run the command **npm install** inside the extension folder.
+3. Open the VS Code application.
+5. Click on File -> Open Folder and select the folder of the extension.
+6. Press the F5 key to begin debugging the extension, a new VS Code window will open with the title of [Extension Development Host].
+7. In the new VS Code window click on File -> Open Folder and select a folder in which you would like to create your Service Fabric Project.
+
 ## Known Issues
 
 When generating C# Service Fabric projects on Windows, the path in the generated build script contains / instead of \ . This will 
