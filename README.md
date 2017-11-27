@@ -43,11 +43,6 @@ If you are using VS Code on Windows, a bash shell must be installed. Bash on Ubu
 6. Press the F5 key to begin debugging the extension, a new VS Code window will open with the title of [Extension Development Host].
 7. In the new VS Code window click on File -> Open Folder and select a folder in which you would like to create your Service Fabric Project.
 
-## Known Issues
-
-When generating C# Service Fabric projects on Windows, the path in the generated build script contains / instead of \ . This will 
-trigger an error that the proj file cannot be found when trying to build the application.
-
 ## Release Notes
 
 ### 1.0.0
