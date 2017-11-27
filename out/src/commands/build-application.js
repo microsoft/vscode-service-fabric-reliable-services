@@ -43,7 +43,7 @@ function buildCSharpApplication() {
             vscode.window.showErrorMessage("A build file was not found in the workspace");
             return;
         }
-        const buildPath = uris[0].path;
+        const buildPath = uris[0].path.replace('/c:', '');
         replaceBuildPath(buildPath);
         const relativeBuildPath = vscode.workspace.asRelativePath(uris[0].path);
         const terminal = vscode.window.createTerminal('ServiceFabric');
