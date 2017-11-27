@@ -35,11 +35,7 @@ async function buildCSharpApplication() {
         return;
     }
 
-<<<<<<< HEAD
-    const buildPath = uris[0].path.replace('/c:','');
-=======
     const buildPath = uris[0].path.replace('/c:', '');
->>>>>>> d702cb1f2a1657b63636d435ec38aec39e86909d
     replaceBuildPath(buildPath);
     const relativeBuildPath = vscode.workspace.asRelativePath(uris[0].path);
     const terminal: vscode.Terminal = vscode.window.createTerminal('ServiceFabric');
