@@ -47,7 +47,7 @@ function buildCSharpApplication() {
         replaceBuildPath(buildPath);
         const relativeBuildPath = vscode.workspace.asRelativePath(uris[0].path);
         const terminal = vscode.window.createTerminal('ServiceFabric');
-        terminal.sendText('./' + relativeBuildPath);
+        terminal.sendText('./' + 'build.sh');
         terminal.show();
     });
 }
