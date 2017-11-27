@@ -35,25 +35,25 @@ async function buildCSharpApplication() {
         return;
     }
 
-    const buildPath = uris[0].path;
+    const buildPath = uris[0].path.replace('/c:', '');
     replaceBuildPath(buildPath);
     const relativeBuildPath = vscode.workspace.asRelativePath(uris[0].path);
     const terminal: vscode.Terminal = vscode.window.createTerminal('ServiceFabric');
-    terminal.sendText('./' + relativeBuildPath);
+    terminal.sendText('./' + 'build.sh');
     terminal.show();
 }
 
 function replaceBuildPath(filePath) {
     var fs = require('fs')
-    fs.readFile(filePath, 'utf8', function (err,data) {
-      if (err) {
-        return console.log(err);
-      }
-      var result = data.replace(/\\/g, "/");
-    
-      fs.writeFile(filePath, result, 'utf8', function (err) {
-         if (err) return console.log(err);
-      });
+    fs.readFile(filePath, 'utf8', function (err, data) {
+        if (err) {
+            return console.log(err);
+        }
+        var result = data.replace(/\\/g, "/");
+
+        fs.writeFile(filePath, result, 'utf8', function (err) {
+            if (err) return console.log(err);
+        });
     });
 }
 
