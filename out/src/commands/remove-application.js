@@ -9,7 +9,55 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const vscode = require("vscode");
+const exec = require('child_process').exec;
 function removeApplication() {
+    return __awaiter(this, void 0, void 0, function* () {
+        connectToCluster();
+    });
+}
+exports.removeApplication = removeApplication;
+function connectToCluster() {
+    return __awaiter(this, void 0, void 0, function* () {
+        var fs = require('fs');
+        var clusterInfo;
+        const cloudProfile = yield vscode.workspace.findFiles('**/Cloud.json');
+        const pathToCloudProfile = cloudProfile[0].path;
+        yield fs.readFile(pathToCloudProfile, 'utf8', function (err, data) {
+            if (err) {
+                throw err;
+            }
+            clusterInfo = JSON.parse(data);
+            if (clusterInfo.ClientCert.length > 0) {
+                connectToSecureCluster(clusterInfo);
+            }
+            else {
+                connectToUnsecureCluster(clusterInfo);
+            }
+        });
+        return clusterInfo;
+    });
+}
+function connectToSecureCluster(clusterInfo) {
+    exec('sfctl cluster select --endpoint ' + clusterInfo.ConnectionIPOrURL + ':' + clusterInfo.ConnectionPort + ' --cert ' + clusterInfo.ClientCert + ' --key ' + clusterInfo.ClientKey + ' --no-verify', function (err, stdout, stderr) {
+        if (err) {
+            vscode.window.showErrorMessage("Could not connect to cluster.");
+            console.log(err);
+            return;
+        }
+        uninstallApplication();
+    });
+}
+function connectToUnsecureCluster(clusterInfo) {
+    exec('sfctl cluster select --endpoint ' + clusterInfo.ConnectionIPOrURL + ':' + clusterInfo.ConnectionPort, function (err, stdout, stderr) {
+        if (err) {
+            vscode.window.showErrorMessage("Could not connect to cluster.");
+            console.log(err);
+            return;
+        }
+        uninstallApplication();
+    });
+}
+function uninstallApplication() {
     return __awaiter(this, void 0, void 0, function* () {
         const uri = yield vscode.workspace.findFiles('**/uninstall.sh');
         if (uri.length < 1) {
@@ -22,5 +70,4 @@ function removeApplication() {
         terminal.show();
     });
 }
-exports.removeApplication = removeApplication;
 //# sourceMappingURL=remove-application.js.map
