@@ -241,6 +241,7 @@ typings/
 
 # Visual Studio 6 build log
 *.plg
+*.js.map
 
 # Visual Studio 6 workspace options file
 *.opt

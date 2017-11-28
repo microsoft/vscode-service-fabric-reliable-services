@@ -2,6 +2,8 @@ import * as vscode from "vscode";
 const exec = require('child_process').exec;
 
 export async function publishApplication() {
+    const clusterInfo = await readCloudProfile();
+
     const endpoint = await promptForEndpointName();
     const security = await pickSecuityType();
 
@@ -128,4 +130,18 @@ async function installApplication() {
     const terminal: vscode.Terminal = vscode.window.createTerminal('ServiceFabric');
     terminal.sendText('./' + relativeInstallPath);
     terminal.show();
+}
+
+async function readCloudProfile() {
+    var fs = require('fs');
+    const cloudProfile: vscode.Uri[] = await vscode.workspace.findFiles('**/Cloud.json');
+    const pathToCloudProfile = cloudProfile[0].path;
+
+    await fs.readFile(pathToCloudProfile, 'utf8', function (err, data) {
+        if(err) {
+            throw err;
+        }
+        return JSON.parse(data);
+    });
+
 }

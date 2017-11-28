@@ -13,6 +13,10 @@ const config_utils_1 = require("../configureWorkspace/config-utils");
 function buildApplication() {
     return __awaiter(this, void 0, void 0, function* () {
         const languageType = yield config_utils_1.quickPickLanguage();
+        const uris = yield vscode.workspace.findFiles('**/Cloud.json');
+        if (uris.length < 1) {
+            createPublishProfile();
+        }
         if (languageType === 'Java') {
             buildGradleApplication();
         }
@@ -61,6 +65,30 @@ function replaceBuildPath(filePath) {
         fs.writeFile(filePath, result, 'utf8', function (err) {
             if (err)
                 return console.log(err);
+        });
+    });
+}
+function createPublishProfile() {
+    return __awaiter(this, void 0, void 0, function* () {
+        var publishParams = {
+            ConnectionIPOrURL: '',
+            ConnectionPort: '19080',
+            ClientKey: '',
+            ClientCert: ''
+        };
+        var publishParamsJson = JSON.stringify(publishParams);
+        const uri = yield vscode.workspace.findFiles('**/install.sh');
+        if (uri.length < 1) {
+            vscode.window.showErrorMessage("An install.sh file was not found in the workspace");
+            return;
+        }
+        const buildPath = uri[0].path.replace('/c:', '').replace('install.sh', '');
+        console.log('Build Path: ' + buildPath);
+        var fs = require('fs');
+        fs.writeFile(buildPath + 'Cloud.json', publishParamsJson, 'utf8', function (err) {
+            if (err)
+                throw err;
+            console.log('Completed!');
         });
     });
 }

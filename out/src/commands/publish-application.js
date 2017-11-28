@@ -12,6 +12,7 @@ const vscode = require("vscode");
 const exec = require('child_process').exec;
 function publishApplication() {
     return __awaiter(this, void 0, void 0, function* () {
+        const clusterInfo = yield readCloudProfile();
         const endpoint = yield promptForEndpointName();
         const security = yield pickSecuityType();
         if (security === 'Secure Cluster') {
@@ -141,6 +142,19 @@ function installApplication() {
         const terminal = vscode.window.createTerminal('ServiceFabric');
         terminal.sendText('./' + relativeInstallPath);
         terminal.show();
+    });
+}
+function readCloudProfile() {
+    return __awaiter(this, void 0, void 0, function* () {
+        var fs = require('fs');
+        const cloudProfile = yield vscode.workspace.findFiles('**/Cloud.json');
+        const pathToCloudProfile = cloudProfile[0].path;
+        yield fs.readFile(pathToCloudProfile, 'utf8', function (err, data) {
+            if (err) {
+                throw err;
+            }
+            return JSON.parse(data);
+        });
     });
 }
 //# sourceMappingURL=publish-application.js.map
