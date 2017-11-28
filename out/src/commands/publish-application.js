@@ -12,92 +12,13 @@ const vscode = require("vscode");
 const exec = require('child_process').exec;
 function publishApplication() {
     return __awaiter(this, void 0, void 0, function* () {
-        const clusterInfo = yield readCloudProfile();
-        const endpoint = yield promptForEndpointName();
-        const security = yield pickSecuityType();
-        if (security === 'Secure Cluster') {
-            const certType = yield pickCertificateType();
-            if (certType === 'Pem') {
-                const pathToPem = yield promptForPathToPem();
-                deployToSecureClusterPem(endpoint, pathToPem);
-            }
-            else {
-                const pathToCert = yield promptForPathToCert();
-                const pathToKey = yield promptForPathToKey();
-                deployToSecureClusterCert(endpoint, pathToCert, pathToKey);
-            }
-        }
-        else {
-            deployToUnsecureCluster(endpoint);
-        }
+        yield readCloudProfile();
     });
 }
 exports.publishApplication = publishApplication;
-function pickSecuityType() {
+function deployToUnsecureCluster(clusterInfo) {
     return __awaiter(this, void 0, void 0, function* () {
-        var opt = {
-            matchOnDescription: true,
-            matchOnDetail: true,
-            placeHolder: 'Please select a cluster type'
-        };
-        const items = [];
-        items.push('Unsecure Cluster');
-        items.push('Secure Cluster');
-        return vscode.window.showQuickPick(items, opt);
-    });
-}
-function pickCertificateType() {
-    return __awaiter(this, void 0, void 0, function* () {
-        var opt = {
-            matchOnDescription: true,
-            matchOnDetail: true,
-            placeHolder: 'Please select a certificate type'
-        };
-        const items = [];
-        items.push('Pem');
-        items.push('Cert, Key Pair');
-        return vscode.window.showQuickPick(items, opt);
-    });
-}
-function promptForPathToPem() {
-    return __awaiter(this, void 0, void 0, function* () {
-        var opt = {
-            placeHolder: 'client.pem',
-            prompt: 'Enter the path relative to the current workspace to the pem file',
-        };
-        return vscode.window.showInputBox(opt);
-    });
-}
-function promptForPathToCert() {
-    return __awaiter(this, void 0, void 0, function* () {
-        var opt = {
-            placeHolder: 'client.crt',
-            prompt: 'Enter the path relative to the current workspace to the cert file',
-        };
-        return vscode.window.showInputBox(opt);
-    });
-}
-function promptForPathToKey() {
-    return __awaiter(this, void 0, void 0, function* () {
-        var opt = {
-            placeHolder: 'client.crt',
-            prompt: 'Enter the path relative to the current workspace to the key file',
-        };
-        return vscode.window.showInputBox(opt);
-    });
-}
-function promptForEndpointName() {
-    return __awaiter(this, void 0, void 0, function* () {
-        var opt = {
-            placeHolder: 'Connection Endpoint',
-            prompt: 'Enter a cluster connection endpoint http://PublicIPorFQDN:19080',
-        };
-        return vscode.window.showInputBox(opt);
-    });
-}
-function deployToUnsecureCluster(endpoint) {
-    return __awaiter(this, void 0, void 0, function* () {
-        exec('sfctl cluster select --endpoint ' + endpoint, function (err, stdout, stderr) {
+        exec('sfctl cluster select --endpoint ' + clusterInfo.ConnectionIPOrURL + clusterInfo.ConnectionPort, function (err, stdout, stderr) {
             if (err) {
                 vscode.window.showErrorMessage("Could not connect to cluster.");
                 console.log(err);
@@ -107,21 +28,9 @@ function deployToUnsecureCluster(endpoint) {
         });
     });
 }
-function deployToSecureClusterPem(endpoint, pathToPem) {
+function deployToSecureClusterCert(clusterInfo) {
     return __awaiter(this, void 0, void 0, function* () {
-        exec('sfctl cluster select --endpoint ' + endpoint + ' --pem ' + pathToPem + ' --no-verify', function (err, stdout, stderr) {
-            if (err) {
-                vscode.window.showErrorMessage("Could not connect to cluster.");
-                console.log(err);
-                return;
-            }
-            installApplication();
-        });
-    });
-}
-function deployToSecureClusterCert(endpoint, pathToCert, pathToKey) {
-    return __awaiter(this, void 0, void 0, function* () {
-        exec('sfctl cluster select --endpoint ' + endpoint + ' --cert' + pathToCert + ' --key' + pathToKey, function (err, stdout, stderr) {
+        exec('sfctl cluster select --endpoint ' + clusterInfo.ConnectionIPOrURL + ':' + clusterInfo.ConnectionPort + ' --cert ' + clusterInfo.ClientCert + ' --key ' + clusterInfo.ClientKey + ' --no-verify', function (err, stdout, stderr) {
             if (err) {
                 vscode.window.showErrorMessage("Could not connect to cluster.");
                 console.log(err);
@@ -133,6 +42,7 @@ function deployToSecureClusterCert(endpoint, pathToCert, pathToKey) {
 }
 function installApplication() {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log("Install Application");
         const uri = yield vscode.workspace.findFiles('**/install.sh');
         if (uri.length < 1) {
             vscode.window.showErrorMessage("An install.sh file was not found in the workspace");
@@ -153,7 +63,13 @@ function readCloudProfile() {
             if (err) {
                 throw err;
             }
-            return JSON.parse(data);
+            var clusterInfo = JSON.parse(data);
+            if (clusterInfo.ClientCert.length > 0) {
+                deployToSecureClusterCert(clusterInfo);
+            }
+            else {
+                deployToUnsecureCluster(clusterInfo);
+            }
         });
     });
 }

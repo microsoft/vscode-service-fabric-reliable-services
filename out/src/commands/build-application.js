@@ -76,7 +76,7 @@ function createPublishProfile() {
             ClientKey: '',
             ClientCert: ''
         };
-        var publishParamsJson = JSON.stringify(publishParams);
+        var publishParamsJson = JSON.stringify(publishParams, null, 4);
         const uri = yield vscode.workspace.findFiles('**/install.sh');
         if (uri.length < 1) {
             vscode.window.showErrorMessage("An install.sh file was not found in the workspace");

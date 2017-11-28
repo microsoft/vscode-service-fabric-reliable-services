@@ -68,7 +68,7 @@ async function createPublishProfile() {
         ConnectionPort: '19080',
         ClientKey: '',
         ClientCert: '' };
-    var publishParamsJson = JSON.stringify(publishParams);
+    var publishParamsJson = JSON.stringify(publishParams, null, 4);
 
     const uri: vscode.Uri[] = await vscode.workspace.findFiles('**/install.sh');
     if (uri.length < 1) {
