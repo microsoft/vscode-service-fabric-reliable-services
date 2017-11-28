@@ -58,7 +58,7 @@ function readCloudProfile() {
     return __awaiter(this, void 0, void 0, function* () {
         var fs = require('fs');
         const cloudProfile = yield vscode.workspace.findFiles('**/Cloud.json');
-        const pathToCloudProfile = cloudProfile[0].path;
+        const pathToCloudProfile = cloudProfile[0].path.replace('/c:', '');
         yield fs.readFile(pathToCloudProfile, 'utf8', function (err, data) {
             if (err) {
                 throw err;
