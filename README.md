@@ -11,6 +11,8 @@ A [Visual Studio Code](https://code.visualstudio.com/) extension that provides s
 * Remove applications from a cluster
 * Debugging for Java and C# Service Fabric Applications
 
+![Service Fabric Commands in Visual Studio Code](./media/sf-commands.png)
+
 ## Requirements
 
 As VS Code is a lightweight editor, a number of dependencies must be first installed before Service Fabric applications can be created using VS Code.
