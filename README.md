@@ -26,6 +26,8 @@ As VS Code is a lightweight editor, a number of dependencies must be first insta
 npm install -g yo
 npm install -g generator-azuresfjava
 npm install -g generator-azuresfcsharp
+npm install -g generator-azuresfcontainer
+npm install -g generator-azuresfguest
 ```
 
 ## Extension Settings
