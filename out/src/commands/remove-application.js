@@ -21,7 +21,8 @@ function connectToCluster() {
         var fs = require('fs');
         var clusterInfo;
         const cloudProfile = yield vscode.workspace.findFiles('**/Cloud.json');
-        const pathToCloudProfile = cloudProfile[0].path;
+        const pathToCloudProfile = cloudProfile[0].path.replace('/c:', '');
+        ;
         yield fs.readFile(pathToCloudProfile, 'utf8', function (err, data) {
             if (err) {
                 throw err;

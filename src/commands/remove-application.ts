@@ -10,25 +10,25 @@ async function connectToCluster() {
     var clusterInfo;
 
     const cloudProfile: vscode.Uri[] = await vscode.workspace.findFiles('**/Cloud.json');
-    const pathToCloudProfile = cloudProfile[0].path;
+    const pathToCloudProfile = cloudProfile[0].path.replace('/c:', '');;
 
     await fs.readFile(pathToCloudProfile, 'utf8', function (err, data) {
-        if(err) {
+        if (err) {
             throw err;
         }
         clusterInfo = JSON.parse(data);
-        if(clusterInfo.ClientCert.length > 0) {
+        if (clusterInfo.ClientCert.length > 0) {
             connectToSecureCluster(clusterInfo);
         } else {
             connectToUnsecureCluster(clusterInfo);
         }
     });
 
-    return clusterInfo; 
+    return clusterInfo;
 }
 
 function connectToSecureCluster(clusterInfo) {
-    exec('sfctl cluster select --endpoint ' + clusterInfo.ConnectionIPOrURL + ':' + clusterInfo.ConnectionPort  + ' --cert ' + clusterInfo.ClientCert + ' --key ' + clusterInfo.ClientKey + ' --no-verify', function (err, stdout, stderr) {
+    exec('sfctl cluster select --endpoint ' + clusterInfo.ConnectionIPOrURL + ':' + clusterInfo.ConnectionPort + ' --cert ' + clusterInfo.ClientCert + ' --key ' + clusterInfo.ClientKey + ' --no-verify', function (err, stdout, stderr) {
         if (err) {
             vscode.window.showErrorMessage("Could not connect to cluster.");
             console.log(err);
@@ -39,7 +39,7 @@ function connectToSecureCluster(clusterInfo) {
 }
 
 function connectToUnsecureCluster(clusterInfo) {
-    exec('sfctl cluster select --endpoint ' + clusterInfo.ConnectionIPOrURL + ':' + clusterInfo.ConnectionPort , function (err, stdout, stderr) {
+    exec('sfctl cluster select --endpoint ' + clusterInfo.ConnectionIPOrURL + ':' + clusterInfo.ConnectionPort, function (err, stdout, stderr) {
         if (err) {
             vscode.window.showErrorMessage("Could not connect to cluster.");
             console.log(err);
@@ -51,13 +51,13 @@ function connectToUnsecureCluster(clusterInfo) {
 
 async function uninstallApplication() {
     const uri: vscode.Uri[] = await vscode.workspace.findFiles('**/uninstall.sh');
-    if(uri.length < 1) {
+    if (uri.length < 1) {
         vscode.window.showErrorMessage("An uninstall.sh file was not found in the workspace");
         return;
     }
 
     const relativeInstallPath = vscode.workspace.asRelativePath(uri[0].path);
     const terminal: vscode.Terminal = vscode.window.createTerminal('ServiceFabric');
-    terminal.sendText('./'+relativeInstallPath);
+    terminal.sendText('./' + relativeInstallPath);
     terminal.show();
 }

@@ -44,10 +44,10 @@ async function installApplication() {
 async function readCloudProfile() {
     var fs = require('fs');
     const cloudProfile: vscode.Uri[] = await vscode.workspace.findFiles('**/Cloud.json');
-    const pathToCloudProfile = cloudProfile[0].path;
+    const pathToCloudProfile = cloudProfile[0].path.replace('/c:', '');
 
     await fs.readFile(pathToCloudProfile, 'utf8', function (err, data) {
-        if(err) {
+        if (err) {
             throw err;
         }
         var clusterInfo = JSON.parse(data);
