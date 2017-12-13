@@ -21,6 +21,7 @@ As VS Code is a lightweight editor, a number of dependencies must be first insta
 * [Install Node.js](https://nodejs.org/en/)
 * [Install Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
 * [Install Git](https://git-scm.com/)
+* [Install .Net Core on Ubuntu](https://www.microsoft.com/net/learn/get-started/linuxredhat)
 * Install Yeoman Generators
 ```sh
 npm install -g yo
