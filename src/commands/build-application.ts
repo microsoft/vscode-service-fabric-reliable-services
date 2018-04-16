@@ -1,6 +1,26 @@
 import * as vscode from "vscode";
 import { quickPickLanguage } from '../configureWorkspace/config-utils';
+import { win32 } from "path";
 
+let _isWindows = false;
+let _isMacintosh = false;
+let _isLinux = false;
+
+export interface IProcessEnvironment {
+	[key: string]: string;
+}
+interface INodeProcess {
+	platform: string;
+	env: IProcessEnvironment;
+	getuid(): number;
+	nextTick: Function;
+}
+declare let process :INodeProcess;
+
+    _isWindows = (process.platform === 'win32');
+	_isMacintosh = (process.platform === 'darwin');
+    _isLinux = (process.platform === 'linux');
+    
 export async function buildApplication() {
 
     const languageType = await quickPickLanguage();
@@ -34,7 +54,11 @@ async function buildGradleApplication() {
 }
 
 async function buildCSharpApplication() {
-    const uris: vscode.Uri[] = await vscode.workspace.findFiles('**/build.sh');
+     var uris: vscode.Uri[] = null;
+    if(_isWindows)
+        uris = await vscode.workspace.findFiles('**/build.cmd');
+    else if(_isLinux)
+        uris = await vscode.workspace.findFiles('**/build.sh');
     if (uris.length < 1) {
         vscode.window.showErrorMessage("A build file was not found in the workspace");
         return;
@@ -42,12 +66,20 @@ async function buildCSharpApplication() {
 
     const buildPath = uris[0].path.replace('/c:', '');
     replaceBuildPath(buildPath);
-    const relativeBuildPath = vscode.workspace.asRelativePath(uris[0].path);
+    const relativeBuildPath = vscode.workspace.asRelativePath(uris[0]);
     const terminal: vscode.Terminal = vscode.window.createTerminal('ServiceFabric');
-    terminal.sendText('./' + 'build.sh');
+    var commands = relativeBuildPath ;
+    terminal.sendText(commands);
+    if(_isLinux)
+       changePermissions(commands,terminal);
     terminal.show();
 }
 
+function changePermissions(filename, terminal: vscode.Terminal){
+       var command = 'chmod a+x '+filename;
+       terminal.sendText(command);
+}
+   
 function replaceBuildPath(filePath) {
     var fs = require('fs')
     fs.readFile(filePath, 'utf8', function (err, data) {
