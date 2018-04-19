@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import * as vars from './osdetector';
 const exec = require('child_process').exec;
 
 export async function deployApplication() {
@@ -14,14 +15,30 @@ export async function deployApplication() {
 }
 
 async function installApplication() {
-    const uri: vscode.Uri[] = await vscode.workspace.findFiles('**/install.sh');
-    if (uri.length < 1) {
-        vscode.window.showErrorMessage("An install.sh file was not found in the workspace");
-        return;
+    var uri: vscode.Uri[] = null;
+    if(vars._isWindows){
+         uri = await vscode.workspace.findFiles('**/install.cmd');
+         if (uri.length < 1) {
+            vscode.window.showErrorMessage("An install.cmd file was not found in the workspace");
+            return;     
+        }
     }
-
-    const relativeInstallPath = vscode.workspace.asRelativePath(uri[0].path);
+    else if(vars._isLinux){
+         uri = await vscode.workspace.findFiles('**/install.sh');
+         if (uri.length < 1) {
+            vscode.window.showErrorMessage("An install.sh file was not found in the workspace");
+            return;
+        }
+    }
+    const relativeInstallPath = vscode.workspace.asRelativePath(uri[0]);
     const terminal: vscode.Terminal = vscode.window.createTerminal('ServiceFabric');
-    terminal.sendText('./' + relativeInstallPath);
+    if(vars._isLinux)
+        changePermissions(relativeInstallPath,terminal);
+    terminal.sendText(relativeInstallPath);
     terminal.show();
+}
+
+function changePermissions(filename, terminal: vscode.Terminal){
+    var command = 'chmod a+x '+filename;
+    terminal.sendText(command);
 }
