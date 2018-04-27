@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { quickPickLanguage } from '../configureWorkspace/config-utils';
 import { win32 } from "path";
+import * as vars from './osdetector';
 
 let _isWindows = false;
 let _isMacintosh = false;
@@ -102,15 +103,26 @@ async function createPublishProfile() {
         ClientCert: '' };
     var publishParamsJson = JSON.stringify(publishParams, null, 4);
 
-    const uri: vscode.Uri[] = await vscode.workspace.findFiles('**/install.sh');
-    if (uri.length < 1) {
-        vscode.window.showErrorMessage("An install.sh file was not found in the workspace");
-        return;
+      var uri: vscode.Uri[] = null;
+      var buildPath;
+    if(vars._isWindows){
+         uri = await vscode.workspace.findFiles('**/install.ps1');
+         if (uri.length < 1) {
+            vscode.window.showErrorMessage("An install.cmd file was not found in the workspace");
+            return;     
+        }
+         buildPath = uri[0].fsPath.replace('/c:', '').replace('install.ps1','');
     }
-    const buildPath = uri[0].path.replace('/c:', '').replace('install.sh','');
+    else if(vars._isLinux){
+         uri = await vscode.workspace.findFiles('**\/install.sh');
+         if (uri.length < 1) {
+            vscode.window.showErrorMessage("An install.sh file was not found in the workspace");
+            return;
+        }
+        buildPath = uri[0].path.replace('/c:', '').replace('install.sh','');
+}
 
     console.log('Build Path: '+buildPath);
-
     var fs = require('fs');
     fs.writeFile(buildPath + 'Cloud.json', publishParamsJson, 'utf8', function(err) {
         if(err) throw err;
