@@ -1,0 +1,4 @@
+
+Remove-ServiceFabricApplication fabric:/TestWindowsApp 
+Unregister-ServiceFabricApplicationType TestWindowsAppType 1.0.0
+Remove-ServiceFabricApplicationPackage TestWindowsApp

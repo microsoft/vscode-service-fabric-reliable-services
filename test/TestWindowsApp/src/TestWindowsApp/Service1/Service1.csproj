@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Stateless Service Application</Description>
+    <Authors> </Authors>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <AssemblyName>Service1</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <PackageId>Service1</PackageId>
+    <PackageTargetFallback>$(PackageTargetFallback)</PackageTargetFallback>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ServiceFabric.Services" Version="3.0.456" />
+  </ItemGroup>
+
+</Project>

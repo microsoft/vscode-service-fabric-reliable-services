@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import { quickPickLanguage } from '../configureWorkspace/config-utils';
 import { win32 } from "path";
 import * as vars from './osdetector';
+import { resolve } from "url";
 
 let _isWindows = false;
 let _isMacintosh = false;
@@ -34,11 +35,11 @@ export async function buildApplication() {
     if (languageType === 'Java') {
         buildGradleApplication();
     } else if (languageType === 'C#') {
-        buildCSharpApplication();
+        buildCSharpApplication(true);
     }
 }
 
-async function buildGradleApplication() {
+export async function buildGradleApplication() {
 
     const uris: vscode.Uri[] = await vscode.workspace.findFiles('**/build.gradle');
     if (uris.length < 1) {
@@ -54,26 +55,46 @@ async function buildGradleApplication() {
     terminal.show();
 }
 
-async function buildCSharpApplication() {
-     var uris: vscode.Uri[] = null;
+export async function buildCSharpApplication(show:boolean) {
+    var uris: vscode.Uri[] = null;
     if(_isWindows)
         uris = await vscode.workspace.findFiles('**/build.cmd');
     else if(_isLinux)
         uris = await vscode.workspace.findFiles('**/build.sh');
     if (uris.length < 1) {
         vscode.window.showErrorMessage("A build file was not found in the workspace");
-        return;
+        return 1;
     }
+        const buildPath = uris[0].fsPath.replace('/c:', '');
+        replaceBuildPath(buildPath);
+        const relativeBuildPath = vscode.workspace.asRelativePath(uris[0]);
+        const terminal: vscode.Terminal = vscode.window.createTerminal('ServiceFabric');
+        var commands = relativeBuildPath ;
+        if(_isLinux)
+            changePermissions(commands,terminal);
+        terminal.sendText(commands,true);
+        if(show){
+                terminal.show();
+                return 0;
+            }
 
-    const buildPath = uris[0].path.replace('/c:', '');
-    replaceBuildPath(buildPath);
-    const relativeBuildPath = vscode.workspace.asRelativePath(uris[0]);
-    const terminal: vscode.Terminal = vscode.window.createTerminal('ServiceFabric');
-    var commands = relativeBuildPath ;
-    terminal.sendText(commands);
-    if(_isLinux)
-       changePermissions(commands,terminal);
-    terminal.show();
+        else{
+            terminal.show(true);
+            terminal.sendText('$? > TestWindowsApp/out3.out',true);
+            var fs = require('fs');
+            console.log(vscode.workspace.workspaceFolders[0].uri.fsPath);
+            var outpath = vscode.workspace.workspaceFolders[0].uri.fsPath+'/TestWindowsApp/out3.out';
+            var content;
+            return new Promise((resolve, reject) => {
+                setTimeout(function(){
+                    content = fs.readFileSync(outpath, 'utf8');
+                    if(content.includes('T'))
+                        resolve(0);
+                    else
+                        reject(1);
+                },30000);
+            });
+        }
 }
 
 function changePermissions(filename, terminal: vscode.Terminal){
