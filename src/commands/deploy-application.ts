@@ -14,6 +14,11 @@ export async function deployApplication() {
         });
     }
     else if(vars._isWindows){
+        var buildFiles: vscode.Uri[] = await vscode.workspace.findFiles('**/build.gradle');
+        if(buildFiles.length > 1){
+            vscode.window.showErrorMessage("Sorry! You cannot deploy Service Fabric Java application to Windows Cluster");
+            return;
+        }
         var uri: vscode.Uri[] = await vscode.workspace.findFiles('**/preinstall.ps1');
         if (uri.length < 1) {
             vscode.window.showErrorMessage("A preinstall.ps1 file was not found in the workspace");

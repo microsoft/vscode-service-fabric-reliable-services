@@ -25,7 +25,12 @@ declare let process :INodeProcess;
     
 export async function buildApplication() {
 
-    const languageType = await quickPickLanguage();
+    var languageType;
+    const buildFiles: vscode.Uri[] = await vscode.workspace.findFiles('**/build.gradle');
+    if (buildFiles.length < 1)
+        languageType = 'C#';
+    else
+        languageType = 'Java';
 
     const uris: vscode.Uri[] = await vscode.workspace.findFiles('**/Cloud.json');
     if (uris.length < 1) {
