@@ -65,36 +65,35 @@ export async function buildCSharpApplication(show:boolean) {
         vscode.window.showErrorMessage("A build file was not found in the workspace");
         return 1;
     }
-        const buildPath = uris[0].fsPath.replace('/c:', '');
-        replaceBuildPath(buildPath);
-        const relativeBuildPath = vscode.workspace.asRelativePath(uris[0]);
-        const terminal: vscode.Terminal = vscode.window.createTerminal('ServiceFabric');
-        var commands = relativeBuildPath ;
-        if(_isLinux)
-            changePermissions(commands,terminal);
-        terminal.sendText(commands,true);
-        if(show){
-                terminal.show();
-                return 0;
-            }
-
-        else{
-            terminal.show(true);
-            terminal.sendText('$? > TestWindowsApp/out3.out',true);
-            var fs = require('fs');
-            console.log(vscode.workspace.workspaceFolders[0].uri.fsPath);
-            var outpath = vscode.workspace.workspaceFolders[0].uri.fsPath+'/TestWindowsApp/out3.out';
-            var content;
-            return new Promise((resolve, reject) => {
-                setTimeout(function(){
-                    content = fs.readFileSync(outpath, 'utf8');
-                    if(content.includes('T'))
-                        resolve(0);
-                    else
-                        reject(1);
-                },30000);
-            });
-        }
+    const buildPath = uris[0].fsPath.replace('/c:', '');
+    replaceBuildPath(buildPath);
+    const relativeBuildPath = vscode.workspace.asRelativePath(uris[0]);
+    const terminal: vscode.Terminal = vscode.window.createTerminal('ServiceFabric');
+    var commands = relativeBuildPath ;
+    if(_isLinux)
+        changePermissions(commands,terminal);
+    terminal.sendText(commands,true);
+    if(show){
+        terminal.show();
+        return 0;
+    }
+    else{
+        terminal.show(true);
+        terminal.sendText('$? > TestWindowsApp/out3.out',true);
+        var fs = require('fs');
+        console.log(vscode.workspace.workspaceFolders[0].uri.fsPath);
+        var outpath = vscode.workspace.workspaceFolders[0].uri.fsPath+'/TestWindowsApp/out3.out';
+        var content;
+        return new Promise((resolve, reject) => {
+            setTimeout(function(){
+                content = fs.readFileSync(outpath, 'utf8');
+                if(content.includes('T'))
+                    resolve(0);
+                else
+                    reject(1);
+            },30000);
+        });
+    }
 }
 
 function changePermissions(filename, terminal: vscode.Terminal){

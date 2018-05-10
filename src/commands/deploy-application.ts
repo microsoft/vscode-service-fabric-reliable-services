@@ -5,7 +5,7 @@ const exec = require('child_process').exec;
 export async function deployApplication() {
     var terminal : vscode.Terminal = vscode.window.createTerminal('ServiceFabric');
     if(vars._isLinux){
-        exec('sfctl cluster select --endpoint http://10.171.42.42:10550', function (err, stdout, stderr) {
+        exec('sfctl cluster select --endpoint http://localhost:10550', function (err, stdout, stderr) {
             if (err) {
                 vscode.window.showErrorMessage("Could not connect to cluster.");
                 console.log(err);
