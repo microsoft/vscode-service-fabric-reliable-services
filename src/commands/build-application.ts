@@ -4,25 +4,6 @@ import { win32 } from "path";
 import * as vars from './osdetector';
 import { resolve } from "url";
 
-let _isWindows = false;
-let _isMacintosh = false;
-let _isLinux = false;
-
-export interface IProcessEnvironment {
-	[key: string]: string;
-}
-interface INodeProcess {
-	platform: string;
-	env: IProcessEnvironment;
-	getuid(): number;
-	nextTick: Function;
-}
-declare let process :INodeProcess;
-
-    _isWindows = (process.platform === 'win32');
-	_isMacintosh = (process.platform === 'darwin');
-    _isLinux = (process.platform === 'linux');
-    
 export async function buildApplication() {
 
     var languageType;
@@ -62,9 +43,9 @@ export async function buildGradleApplication() {
 
 export async function buildCSharpApplication(show:boolean) {
     var uris: vscode.Uri[] = null;
-    if(_isWindows)
+    if (vars._isWindows)
         uris = await vscode.workspace.findFiles('**/build.cmd');
-    else if(_isLinux)
+    else if (vars._isLinux)
         uris = await vscode.workspace.findFiles('**/build.sh');
     if (uris.length < 1) {
         vscode.window.showErrorMessage("A build file was not found in the workspace");
@@ -75,14 +56,14 @@ export async function buildCSharpApplication(show:boolean) {
     const relativeBuildPath = vscode.workspace.asRelativePath(uris[0]);
     const terminal: vscode.Terminal = vscode.window.createTerminal('ServiceFabric');
     var commands = relativeBuildPath ;
-    if(_isLinux)
+    if (vars._isLinux)
         changePermissions(commands,terminal);
     terminal.sendText(commands,true);
-    if(show){
+    if (show) {
         terminal.show();
         return 0;
     }
-    else{
+    else {
         terminal.show(true);
         terminal.sendText('$? > TestWindowsApp/out3.out',true);
         var fs = require('fs');
@@ -101,7 +82,7 @@ export async function buildCSharpApplication(show:boolean) {
     }
 }
 
-function changePermissions(filename, terminal: vscode.Terminal){
+function changePermissions(filename, terminal: vscode.Terminal) {
        var command = 'chmod a+x '+filename;
        terminal.sendText(command);
 }
@@ -130,7 +111,7 @@ async function createPublishProfile() {
 
       var uri: vscode.Uri[] = null;
       var buildPath;
-    if(vars._isWindows){
+    if (vars._isWindows) {
          uri = await vscode.workspace.findFiles('**/install.ps1');
          if (uri.length < 1) {
             vscode.window.showErrorMessage("An install.cmd file was not found in the workspace");
@@ -138,7 +119,7 @@ async function createPublishProfile() {
         }
          buildPath = uri[0].fsPath.replace('/c:', '').replace('install.ps1','');
     }
-    else if(vars._isLinux){
+    else if (vars._isLinux) {
          uri = await vscode.workspace.findFiles('**\/install.sh');
          if (uri.length < 1) {
             vscode.window.showErrorMessage("An install.sh file was not found in the workspace");
@@ -150,7 +131,7 @@ async function createPublishProfile() {
     console.log('Build Path: '+buildPath);
     var fs = require('fs');
     fs.writeFile(buildPath + 'Cloud.json', publishParamsJson, 'utf8', function(err) {
-        if(err) throw err;
+        if (err) throw err;
         console.log('Completed!');
     });
 }

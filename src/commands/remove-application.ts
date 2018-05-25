@@ -50,8 +50,8 @@ function connectToSecureCluster(clusterInfo) {
 
 async function connectToUnsecureCluster(clusterInfo) {
     var terminal: vscode.Terminal = vscode.window.createTerminal('ServiceFabric');
-    if(clusterInfo.ConnectionIPOrURL.length > 0){
-        if(vars._isLinux){       
+    if (clusterInfo.ConnectionIPOrURL.length > 0) {
+        if (vars._isLinux) {
             exec('sfctl cluster select --endpoint ' + clusterInfo.ConnectionIPOrURL + ':' + clusterInfo.ConnectionPort, function (err, stdout, stderr) {
                 if (err) {
                     vscode.window.showErrorMessage("Could not connect to cluster.");
@@ -60,22 +60,13 @@ async function connectToUnsecureCluster(clusterInfo) {
                 }
             });
         }
-        else if(vars._isWindows){
-            var uri: vscode.Uri[] = await vscode.workspace.findFiles('**/preinstall.ps1');
-            if (uri.length < 1) {
-                vscode.window.showErrorMessage("A preinstall.ps1 file was not found in the workspace");
-                return;
-            }
-            const relativeInstallPath = vscode.workspace.asRelativePath(uri[0]);
-            //terminal.sendText(relativeInstallPath);
-            var commands = "ipmo  E:\\Work\\WindowsFabric\\out\\debug-amd64\\bin\\FabricDrop\\ServiceFabricClientPackage\\ServiceFabric\\Microsoft.ServiceFabric.Powershell.dll";
-            terminal.sendText(commands); 
-            terminal.show();
+        else if (vars._isWindows) {
             terminal.sendText("Connect-ServiceFabricCluster --ConnectionEndPoint "+ clusterInfo.ConnectionIPOrURL + ':' + clusterInfo.ConnectionPort);
+            terminal.show();
         }
     }
-    else{
-        if(vars._isLinux){
+    else {
+        if (vars._isLinux) {
             exec('sfctl cluster select --endpoint http://localhost:10550', function (err, stdout, stderr) {
             if (err) {
                 vscode.window.showErrorMessage("Could not connect to cluster.");
@@ -84,18 +75,9 @@ async function connectToUnsecureCluster(clusterInfo) {
             }
             });
         }
-        else if(vars._isWindows){
-            var uri: vscode.Uri[] = await vscode.workspace.findFiles('**/preinstall.ps1');
-            if (uri.length < 1) {
-                vscode.window.showErrorMessage("A preinstall.ps1 file was not found in the workspace");
-                return;
-            }
-            const relativeInstallPath = vscode.workspace.asRelativePath(uri[0]);
-            //terminal.sendText(relativeInstallPath);
-            var commands = "ipmo  E:\\Work\\WindowsFabric\\out\\debug-amd64\\bin\\FabricDrop\\ServiceFabricClientPackage\\ServiceFabric\\Microsoft.ServiceFabric.Powershell.dll";
-            terminal.show();
-            terminal.sendText(commands);  
+        else if (vars._isWindows) {
             terminal.sendText("Connect-ServiceFabricCluster");
+            terminal.show();
         }
     }
     uninstallApplication(terminal);
@@ -103,14 +85,14 @@ async function connectToUnsecureCluster(clusterInfo) {
 
 async function uninstallApplication(terminal:vscode.Terminal) {
     var uri: vscode.Uri[] = null;
-    if(vars._isWindows){
+    if (vars._isWindows) {
          uri = await vscode.workspace.findFiles('**/uninstall.ps1');
          if (uri.length < 1) {
             vscode.window.showErrorMessage("An uninstall.ps1 file was not found in the workspace");
             return;     
         }
     }
-    else if(vars._isLinux){
+    else if (vars._isLinux) {
          uri = await vscode.workspace.findFiles('**/uninstall.sh');
          if (uri.length < 1) {
             vscode.window.showErrorMessage("An uninstall.sh file was not found in the workspace");
@@ -118,14 +100,13 @@ async function uninstallApplication(terminal:vscode.Terminal) {
         }
     }
     const relativeInstallPath = vscode.workspace.asRelativePath(uri[0]);
-  //  terminal = vscode.window.createTerminal('ServiceFabric');
-    if(vars._isLinux)
+    if (vars._isLinux)
         changePermissions(relativeInstallPath,terminal);
     terminal.sendText(relativeInstallPath);
     terminal.show();
 }
 
-function changePermissions(filename, terminal: vscode.Terminal){
+function changePermissions(filename, terminal: vscode.Terminal) {
     var command = 'chmod a+x '+filename;
     terminal.sendText(command);
 }
