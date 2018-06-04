@@ -44,8 +44,8 @@ async function installApplication(terminal:vscode.Terminal) {
     const relativeInstallPath = vscode.workspace.asRelativePath(uri[0]);
     if (vars._isLinux)
         changePermissions(relativeInstallPath,terminal);
-    terminal.sendText(relativeInstallPath);
-//terminal.show();
+    terminal.sendText('./' + relativeInstallPath);
+    terminal.show();
 }
 
 function changePermissions(filename, terminal: vscode.Terminal) {

@@ -40,10 +40,8 @@ function connectToSecureCluster(clusterInfo) {
         });
     }
     else if(vars._isWindows){
-        /*const terminal: vscode.Terminal = vscode.window.createTerminal('ServiceFabric');
-        var commands = ''
-        terminal.sendText(relativeInstallPath);
-        terminal.show();*/       
+        terminal.sendText("Connect-ServiceFabricCluster --ConnectionEndPoint "+ clusterInfo.ConnectionIPOrURL + ':' + clusterInfo.ConnectionPort + " -X509Credential -ServerCertThumbprint " + clusterInfo.ServerCertThumbprint + "-FindType FindByThumbprint -FindValue " + clusterInfo.ClientCertThumbprint +" -StoreLocation CurrentUser -StoreName My");
+        terminal.show();
     }
     uninstallApplication(terminal);    
 }
@@ -89,7 +87,7 @@ async function uninstallApplication(terminal:vscode.Terminal) {
          uri = await vscode.workspace.findFiles('**/uninstall.ps1');
          if (uri.length < 1) {
             vscode.window.showErrorMessage("An uninstall.ps1 file was not found in the workspace");
-            return;     
+            return;
         }
     }
     else if (vars._isLinux) {
@@ -102,7 +100,7 @@ async function uninstallApplication(terminal:vscode.Terminal) {
     const relativeInstallPath = vscode.workspace.asRelativePath(uri[0]);
     if (vars._isLinux)
         changePermissions(relativeInstallPath,terminal);
-    terminal.sendText(relativeInstallPath);
+    terminal.sendText('./' + relativeInstallPath);
     terminal.show();
 }
 

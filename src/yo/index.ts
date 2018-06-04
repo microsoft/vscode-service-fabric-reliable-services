@@ -33,7 +33,9 @@ export async function generatorProject(addService) {
 	let main;
 	let sub;
 
-	const generator = await window.showQuickPick(list(yo));
+	var items = list(yo);
+	items.then(async function(value) {
+	const generator = await window.showQuickPick(value);
 	if (generator === undefined) {
 		return;
 	}
@@ -76,6 +78,7 @@ export async function generatorProject(addService) {
 		}
 		window.showErrorMessage(err.message || err);
 	}
+});
 }
 
 function runSubGenerators(subGenerators: string[]) {

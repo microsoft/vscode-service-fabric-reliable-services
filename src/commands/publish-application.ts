@@ -45,7 +45,7 @@ async function deployToSecureClusterCert(clusterInfo) {
     var terminal: vscode.Terminal = vscode.window.createTerminal('ServiceFabric');
     if (clusterInfo.ConnectionIPOrURL.length > 0) {
         if (vars._isLinux) {
-            exec('sfctl cluster select --endpoint ' + clusterInfo.ConnectionIPOrURL + ':' + clusterInfo.ConnectionPort, function (err, stdout, stderr) {
+            exec('sfctl cluster select --endpoint ' + clusterInfo.ConnectionIPOrURL + ':' + clusterInfo.ConnectionPort + ' --cert ' + clusterInfo.ClientCert + ' --key ' + clusterInfo.ClientKey + ' --no-verify', function (err, stdout, stderr) {
                 if (err) {
                     vscode.window.showErrorMessage("Could not connect to cluster.");
                     console.log(err);
@@ -54,7 +54,7 @@ async function deployToSecureClusterCert(clusterInfo) {
             });
         }
         else if (vars._isWindows) {
-            terminal.sendText("Connect-ServiceFabricCluster --ConnectionEndPoint "+ clusterInfo.ConnectionIPOrURL + ':' + clusterInfo.ConnectionPort);
+            terminal.sendText("Connect-ServiceFabricCluster --ConnectionEndPoint "+ clusterInfo.ConnectionIPOrURL + ':' + clusterInfo.ConnectionPort + " -X509Credential -ServerCertThumbprint " + clusterInfo.ServerCertThumbprint + "-FindType FindByThumbprint -FindValue " + clusterInfo.ClientCertThumbprint +" -StoreLocation CurrentUser -StoreName My");
             terminal.show();
         }
     }

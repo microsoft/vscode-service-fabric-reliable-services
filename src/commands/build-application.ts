@@ -55,7 +55,7 @@ export async function buildCSharpApplication(show:boolean) {
     replaceBuildPath(buildPath);
     const relativeBuildPath = vscode.workspace.asRelativePath(uris[0]);
     const terminal: vscode.Terminal = vscode.window.createTerminal('ServiceFabric');
-    var commands = relativeBuildPath ;
+    var commands = "./" + relativeBuildPath ;
     if (vars._isLinux)
         changePermissions(commands,terminal);
     terminal.sendText(commands,true);
@@ -106,7 +106,10 @@ async function createPublishProfile() {
         ConnectionIPOrURL: '',
         ConnectionPort: '19080',
         ClientKey: '',
-        ClientCert: '' };
+        ClientCert: '',
+        ServerCertThumbprint: '',
+        ClientCertThumbprint: ''
+         };
     var publishParamsJson = JSON.stringify(publishParams, null, 4);
 
       var uri: vscode.Uri[] = null;
