@@ -17,7 +17,7 @@ export default class CodeAdapter {
 
 		this.outChannel = window.createOutputChannel('Yeoman');
 		this.outChannel.clear();
-		this.outChannel.show();
+		this.outChannel.show(true);
 
 		// TODO Do not overwrite these methods
 		console.error = console.log = function() {
