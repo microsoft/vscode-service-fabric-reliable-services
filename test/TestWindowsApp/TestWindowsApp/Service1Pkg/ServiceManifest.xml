@@ -13,8 +13,9 @@
   <!-- Code package is your service executable. -->
   <CodePackage Name="Code" Version="1.0.0">
     <EntryPoint>
-      <ExeHost>
-        <Program>entryPoint.cmd</Program>
+      <ExeHost IsExternalExecutable="true">
+        <Program>dotnet</Program>
+        <Arguments>Service1.dll</Arguments>
       </ExeHost>
     </EntryPoint>
   </CodePackage>

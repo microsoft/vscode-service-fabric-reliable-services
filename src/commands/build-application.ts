@@ -4,6 +4,19 @@ import { win32 } from "path";
 import * as vars from './osdetector';
 import { resolve } from "url";
 
+var builScriptExtension;
+var installScriptExtension;
+
+if(vars._isWindows){
+    builScriptExtension = '.cmd';
+    installScriptExtension = '.ps1';
+}
+
+else{
+    builScriptExtension = '.sh';
+    installScriptExtension = '.sh';
+}
+
 export async function buildApplication() {
 
     var languageType;
@@ -41,12 +54,10 @@ export async function buildGradleApplication() {
     terminal.show();
 }
 
-export async function buildCSharpApplication(show:boolean) {
+export async function buildCSharpApplication(showTerminal:boolean) {
     var uris: vscode.Uri[] = null;
     if (vars._isWindows)
-        uris = await vscode.workspace.findFiles('**/build.cmd');
-    else if (vars._isLinux)
-        uris = await vscode.workspace.findFiles('**/build.sh');
+        uris = await vscode.workspace.findFiles('**/build' + builScriptExtension);
     if (uris.length < 1) {
         vscode.window.showErrorMessage("A build file was not found in the workspace");
         return 1;
@@ -56,19 +67,18 @@ export async function buildCSharpApplication(show:boolean) {
     const relativeBuildPath = vscode.workspace.asRelativePath(uris[0]);
     const terminal: vscode.Terminal = vscode.window.createTerminal('ServiceFabric');
     var commands = "./" + relativeBuildPath ;
-    if (vars._isLinux)
-        changePermissions(commands,terminal);
     terminal.sendText(commands,true);
-    if (show) {
+    if (showTerminal) {
         terminal.show();
         return 0;
     }
     else {
+        //This is path for testing. To check whether the build command is successfully sent to terminal
         terminal.show(true);
-        terminal.sendText('$? > TestWindowsApp/out3.out',true);
+        terminal.sendText('$? > TestWindowsApp/out.out',true);
         var fs = require('fs');
         console.log(vscode.workspace.workspaceFolders[0].uri.fsPath);
-        var outpath = vscode.workspace.workspaceFolders[0].uri.fsPath+'/TestWindowsApp/out3.out';
+        var outpath = vscode.workspace.workspaceFolders[0].uri.fsPath+'/TestWindowsApp/out.out';
         var content;
         return new Promise((resolve, reject) => {
             setTimeout(function(){
@@ -82,11 +92,6 @@ export async function buildCSharpApplication(show:boolean) {
     }
 }
 
-function changePermissions(filename, terminal: vscode.Terminal) {
-       var command = 'chmod a+x '+filename;
-       terminal.sendText(command);
-}
-   
 function replaceBuildPath(filePath) {
     var fs = require('fs')
     fs.readFile(filePath, 'utf8', function (err, data) {
@@ -112,24 +117,14 @@ async function createPublishProfile() {
          };
     var publishParamsJson = JSON.stringify(publishParams, null, 4);
 
-      var uri: vscode.Uri[] = null;
-      var buildPath;
-    if (vars._isWindows) {
-         uri = await vscode.workspace.findFiles('**/install.ps1');
-         if (uri.length < 1) {
-            vscode.window.showErrorMessage("An install.cmd file was not found in the workspace");
-            return;     
-        }
-         buildPath = uri[0].fsPath.replace('/c:', '').replace('install.ps1','');
+    var uri: vscode.Uri[] = null;
+    var buildPath;
+    uri = await vscode.workspace.findFiles('**/install' + installScriptExtension);
+    if (uri.length < 1) {
+        vscode.window.showErrorMessage("An install file was not found in the workspace");
+        return;
     }
-    else if (vars._isLinux) {
-         uri = await vscode.workspace.findFiles('**\/install.sh');
-         if (uri.length < 1) {
-            vscode.window.showErrorMessage("An install.sh file was not found in the workspace");
-            return;
-        }
-        buildPath = uri[0].path.replace('/c:', '').replace('install.sh','');
-}
+    buildPath = uri[0].fsPath.replace('/c:', '').replace('install'+ installScriptExtension,'');
 
     console.log('Build Path: '+buildPath);
     var fs = require('fs');

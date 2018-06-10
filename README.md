@@ -9,7 +9,7 @@ A [Visual Studio Code](https://code.visualstudio.com/) extension that provides s
 * Deploy applications to a local cluster
 * Publish applications to a remote cluster
 * Remove applications from a cluster
-* Debugging for Java and C# Service Fabric Applications
+* Debugging for Java and C# Service Fabric Applications(on Linux)
 
 ![Service Fabric Commands in Visual Studio Code](./media/sf-commands.png)
 
@@ -21,6 +21,7 @@ As VS Code is a lightweight editor, a number of dependencies must be first insta
 * [Install Node.js](https://nodejs.org/en/)
 * [Install Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
 * [Install Git](https://git-scm.com/)
+* [Install Service Fabric SDK](https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-get-started)
 * [Install .Net Core on Ubuntu](https://www.microsoft.com/net/learn/get-started/linuxredhat)
 * Install Yeoman Generators
 ```sh
@@ -33,15 +34,11 @@ npm install -g generator-azuresfguest
 
 ## Extension Settings
 
-#### Windows Only
-
-If you are using VS Code on Windows, a bash shell must be installed. Bash on Ubuntu (On Windows) can be installed by following these [instructions](https://msdn.microsoft.com/en-us/commandline/wsl/install_guide).
-
 ## Quickstart
 
 #### Setup (Debug)
 
-1. Open a bash shell and navigate to the directory where the extension folder is stored.
+1. Open a bash shell or command prompt and navigate to the directory where the extension folder is stored.
 2. Run the command **npm install** inside the extension folder.
 3. Open the VS Code application.
 5. Click on File -> Open Folder and select the folder of the extension.
