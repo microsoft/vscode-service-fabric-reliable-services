@@ -111,6 +111,8 @@ The Service Fabric: Build Application command can build either Java or C# Servic
 2.  Select the command Service Fabric: Build Application
 3.  The output of the build process will be output in the integrated terminal
 
+   ## NOTE : Service Fabric Java applications can be developed on windows but only can be deployed onto Linux Clusters.
+
 ## Release Notes
 
 ### 1.0.0
