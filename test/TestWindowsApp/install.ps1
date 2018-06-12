@@ -1,4 +1,0 @@
-$AppPath = "$PSScriptRoot\TestWindowsApp"
-Copy-ServiceFabricApplicationPackage -ApplicationPackagePath $AppPath -ApplicationPackagePathInImageStore TestWindowsApp
-Register-ServiceFabricApplicationType TestWindowsApp
-New-ServiceFabricApplication fabric:/TestWindowsApp TestWindowsAppType 1.0.0

@@ -75,10 +75,10 @@ export async function buildCSharpApplication(showTerminal:boolean) {
     else {
         //This is path for testing. To check whether the build command is successfully sent to terminal
         terminal.show(true);
-        terminal.sendText('$? > TestWindowsApp/out.out',true);
+        terminal.sendText('$? > TestCSharpApplication/out.out',true);
         var fs = require('fs');
         console.log(vscode.workspace.workspaceFolders[0].uri.fsPath);
-        var outpath = vscode.workspace.workspaceFolders[0].uri.fsPath+'/TestWindowsApp/out.out';
+        var outpath = vscode.workspace.workspaceFolders[0].uri.fsPath+'/TestCSharpApplication/out.out';
         var content;
         return new Promise((resolve, reject) => {
             setTimeout(function(){

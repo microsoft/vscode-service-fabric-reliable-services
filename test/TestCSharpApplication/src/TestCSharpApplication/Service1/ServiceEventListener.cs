@@ -21,7 +21,7 @@ namespace Service1
     internal class ServiceEventListener : EventListener
     {
         private string directoryPath = Path.GetTempPath() + "/logs/";
-        private string fileName =  "TestWindowsApp" + "_" +  "Service1" + "_" + DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".log";
+        private string fileName =  "TestCSharpApplication" + "_" +  "Service1" + "_" + DateTime.Now.ToString("yyyyMMddHHmmssffff") + ".log";
 
         /// <summary>
         /// We override this method to get a callback on every event we subscribed to with EnableEvents
