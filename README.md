@@ -72,6 +72,8 @@ The Service Fabric: Create Application command allows you to create a new Servic
 5.  The new Service Fabric application will appear in the workspace
 6.  Open the new folder so that this becomes the root folder in the workspace and you can continue executing the other commands from here
 
+
+
 #### Service Fabric: Add Service
 The Service Fabric: Add Service command allows you to create a new service to an existing Service Fabric application. The application that the service will be added to must be the root directory of the workspace.
 
@@ -121,20 +123,21 @@ Initial release of Service Fabric for VS Code. In this release the extension add
 creating, building, and deploying applications within the VS Code editor.
 
 -----------------------------------------------------------------------------------------------------------
-# Contributing
-
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
-Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit https://cla.microsoft.com.
-
-When you submit a pull request, a CLA-bot will automatically determine whether you need to provide
-a CLA and decorate the PR appropriately (e.g., label, comment). Simply follow the instructions
-provided by the bot. You will only need to do this once across all repos using our CLA.
-
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
-
 # Testing
  After any new additions to the code you can do a basic unit testing available which tests the build command(only C#) by starting debug in Launch tests mode. Make sure you have 'TestCSharpApp' available in your test directory for testing. The test tries to build this application
 
+### Legal
+
+Before we can accept your pull request you will need to sign a **Contribution License Agreement**. All you need to do is to submit a pull request, then the PR will get appropriately labelled (e.g. `cla-required`, `cla-norequired`, `cla-signed`, `cla-already-signed`). If you already signed the agreement we will continue with reviewing the PR, otherwise system will tell you how you can sign the CLA. Once you sign the CLA all future PR's will be labeled as `cla-signed`.
+
+### Code of Conduct
+
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+
+## Telemetry
+
+VS Code collects usage data and sends it to Microsoft to help improve our products and services. Read our [privacy statement](https://go.microsoft.com/fwlink/?LinkID=528096&clcid=0x409) to learn more. If you don’t wish to send usage data to Microsoft, you can set the `telemetry.enableTelemetry` setting to `false`. Learn more in our [FAQ](https://code.visualstudio.com/docs/supporting/faq#_how-to-disable-telemetry-reporting).
+
+## License
+
+[MIT](LICENSE)
