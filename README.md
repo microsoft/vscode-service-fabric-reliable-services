@@ -123,14 +123,12 @@ Initial release of Service Fabric for VS Code. In this release the extension add
 creating, building, and deploying applications within the VS Code editor.
 
 -----------------------------------------------------------------------------------------------------------
-# Testing
- After any new additions to the code you can do a basic unit testing available which tests the build command(only C#) by starting debug in Launch tests mode. Make sure you have 'TestCSharpApp' available in your test directory for testing. The test tries to build this application
 
-### Legal
+# Legal
 
 Before we can accept your pull request you will need to sign a **Contribution License Agreement**. All you need to do is to submit a pull request, then the PR will get appropriately labelled (e.g. `cla-required`, `cla-norequired`, `cla-signed`, `cla-already-signed`). If you already signed the agreement we will continue with reviewing the PR, otherwise system will tell you how you can sign the CLA. Once you sign the CLA all future PR's will be labeled as `cla-signed`.
 
-### Code of Conduct
+## Code of Conduct
 
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
