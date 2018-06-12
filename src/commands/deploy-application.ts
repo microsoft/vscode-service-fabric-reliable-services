@@ -1,27 +1,53 @@
 import * as vscode from "vscode";
+import * as vars from './osdetector';
 const exec = require('child_process').exec;
 
-export async function deployApplication() {
+var builScriptExtension;
+var installScriptExtension;
 
-    exec('sfctl cluster select --endpoint http://localhost:19080', function (err, stdout, stderr) {
-        if (err) {
-            vscode.window.showErrorMessage("Could not connect to cluster.");
-            console.log(err);
-            return;
-        }
-        installApplication();
-    });
+if(vars._isWindows){
+    builScriptExtension = '.cmd';
+    installScriptExtension = '.ps1';
 }
 
-async function installApplication() {
-    const uri: vscode.Uri[] = await vscode.workspace.findFiles('**/install.sh');
-    if (uri.length < 1) {
-        vscode.window.showErrorMessage("An install.sh file was not found in the workspace");
-        return;
-    }
+else{
+    builScriptExtension = '.sh';
+    installScriptExtension = '.sh';
+}
 
-    const relativeInstallPath = vscode.workspace.asRelativePath(uri[0].path);
-    const terminal: vscode.Terminal = vscode.window.createTerminal('ServiceFabric');
+export async function deployApplication() {
+    var terminal : vscode.Terminal = vscode.window.createTerminal('ServiceFabric');
+    if (vars._isLinux || vars._isMacintosh) {
+        exec('sfctl cluster select --endpoint http://localhost:10550', function (err, stdout, stderr) {
+            if (err) {
+                vscode.window.showErrorMessage("Could not connect to cluster.");
+                console.log(err);
+                return;
+            }
+        });
+    }
+    else if (vars._isWindows) {
+        var buildFiles: vscode.Uri[] = await vscode.workspace.findFiles('**/build.gradle');
+        if (buildFiles.length > 1){
+            vscode.window.showErrorMessage("Sorry! You cannot deploy Service Fabric Java application to Windows Cluster");
+            return;
+        }
+        terminal.show();
+        terminal.sendText("Connect-ServiceFabricCluster -ConnectionEndpoint localhost:19000");
+    }
+    installApplication(terminal);
+}
+
+async function installApplication(terminal:vscode.Terminal) {
+    var uri: vscode.Uri[] = null;
+    if (vars._isWindows) {
+         uri = await vscode.workspace.findFiles('**/install' + installScriptExtension);
+         if (uri.length < 1) {
+            vscode.window.showErrorMessage("An install file was not found in the workspace");
+            return;     
+        }
+    }
+    const relativeInstallPath = vscode.workspace.asRelativePath(uri[0]);
     terminal.sendText('./' + relativeInstallPath);
     terminal.show();
 }

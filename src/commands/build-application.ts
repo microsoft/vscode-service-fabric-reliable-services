@@ -1,9 +1,30 @@
 import * as vscode from "vscode";
 import { quickPickLanguage } from '../configureWorkspace/config-utils';
+import { win32 } from "path";
+import * as vars from './osdetector';
+import { resolve } from "url";
+
+var builScriptExtension;
+var installScriptExtension;
+
+if(vars._isWindows){
+    builScriptExtension = '.cmd';
+    installScriptExtension = '.ps1';
+}
+
+else{
+    builScriptExtension = '.sh';
+    installScriptExtension = '.sh';
+}
 
 export async function buildApplication() {
 
-    const languageType = await quickPickLanguage();
+    var languageType;
+    const buildFiles: vscode.Uri[] = await vscode.workspace.findFiles('**/build.gradle');
+    if (buildFiles.length < 1)
+        languageType = 'C#';
+    else
+        languageType = 'Java';
 
     const uris: vscode.Uri[] = await vscode.workspace.findFiles('**/Cloud.json');
     if (uris.length < 1) {
@@ -13,11 +34,11 @@ export async function buildApplication() {
     if (languageType === 'Java') {
         buildGradleApplication();
     } else if (languageType === 'C#') {
-        buildCSharpApplication();
+        buildCSharpApplication(true);
     }
 }
 
-async function buildGradleApplication() {
+export async function buildGradleApplication() {
 
     const uris: vscode.Uri[] = await vscode.workspace.findFiles('**/build.gradle');
     if (uris.length < 1) {
@@ -33,19 +54,42 @@ async function buildGradleApplication() {
     terminal.show();
 }
 
-async function buildCSharpApplication() {
-    const uris: vscode.Uri[] = await vscode.workspace.findFiles('**/build.sh');
+export async function buildCSharpApplication(showTerminal:boolean) {
+    var uris: vscode.Uri[] = null;
+    if (vars._isWindows)
+        uris = await vscode.workspace.findFiles('**/build' + builScriptExtension);
     if (uris.length < 1) {
         vscode.window.showErrorMessage("A build file was not found in the workspace");
-        return;
+        return 1;
     }
-
-    const buildPath = uris[0].path.replace('/c:', '');
+    const buildPath = uris[0].fsPath.replace('/c:', '');
     replaceBuildPath(buildPath);
-    const relativeBuildPath = vscode.workspace.asRelativePath(uris[0].path);
+    const relativeBuildPath = vscode.workspace.asRelativePath(uris[0]);
     const terminal: vscode.Terminal = vscode.window.createTerminal('ServiceFabric');
-    terminal.sendText('./' + 'build.sh');
-    terminal.show();
+    var commands = "./" + relativeBuildPath ;
+    terminal.sendText(commands,true);
+    if (showTerminal) {
+        terminal.show();
+        return 0;
+    }
+    else {
+        //This is path for testing. To check whether the build command is successfully sent to terminal
+        terminal.show(true);
+        terminal.sendText('$? > TestCSharpApplication/out.out',true);
+        var fs = require('fs');
+        console.log(vscode.workspace.workspaceFolders[0].uri.fsPath);
+        var outpath = vscode.workspace.workspaceFolders[0].uri.fsPath+'/TestCSharpApplication/out.out';
+        var content;
+        return new Promise((resolve, reject) => {
+            setTimeout(function(){
+                content = fs.readFileSync(outpath, 'utf8');
+                if(content.includes('T'))
+                    resolve(0);
+                else
+                    reject(1);
+            },30000);
+        });
+    }
 }
 
 function replaceBuildPath(filePath) {
@@ -67,21 +111,25 @@ async function createPublishProfile() {
         ConnectionIPOrURL: '',
         ConnectionPort: '19080',
         ClientKey: '',
-        ClientCert: '' };
+        ClientCert: '',
+        ServerCertThumbprint: '',
+        ClientCertThumbprint: ''
+         };
     var publishParamsJson = JSON.stringify(publishParams, null, 4);
 
-    const uri: vscode.Uri[] = await vscode.workspace.findFiles('**/install.sh');
+    var uri: vscode.Uri[] = null;
+    var buildPath;
+    uri = await vscode.workspace.findFiles('**/install' + installScriptExtension);
     if (uri.length < 1) {
-        vscode.window.showErrorMessage("An install.sh file was not found in the workspace");
+        vscode.window.showErrorMessage("An install file was not found in the workspace");
         return;
     }
-    const buildPath = uri[0].path.replace('/c:', '').replace('install.sh','');
+    buildPath = uri[0].fsPath.replace('/c:', '').replace('install'+ installScriptExtension,'');
 
     console.log('Build Path: '+buildPath);
-
     var fs = require('fs');
     fs.writeFile(buildPath + 'Cloud.json', publishParamsJson, 'utf8', function(err) {
-        if(err) throw err;
+        if (err) throw err;
         console.log('Completed!');
     });
 }
