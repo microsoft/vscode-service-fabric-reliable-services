@@ -32,25 +32,14 @@ npm install -g generator-azuresfcontainer
 npm install -g generator-azuresfguest
 ```
 
-## Extension Settings
-
 ## Quickstart
 
-#### Setup (Debug)
-
-1. Open a bash shell or command prompt and navigate to the directory where the extension folder is stored.
-2. Run the command **npm install** inside the extension folder.
-3. Open the VS Code application.
-5. Click on File -> Open Folder and select the folder of the extension.
-6. Press the F5 key to begin debugging the extension, a new VS Code window will open with the title of [Extension Development Host].
-7. In the new VS Code window click on File -> Open Folder and select a folder in which you would like to create your Service Fabric Project.
-
-## Setup
+### Setup
 
 1. Open the VS Code application.
 2. Click on the extension icon in the explorer. Search for Service Fabric. Click install for the Service Fabric extension.
 
-## Commands
+### Commands
 The Service Fabric extension for VS Code helps developers to create and deploy Service Fabric projects using many commands. Commands can be called pressing (Ctrl + Shift + p), typing the command name into the input bar, and selecting the desired command for the prompt list.
 
 * Service Fabric: Create Application
@@ -71,8 +60,6 @@ The Service Fabric: Create Application command allows you to create a new Servic
 4.  Follow the prompts for naming the service
 5.  The new Service Fabric application will appear in the workspace
 6.  Open the new folder so that this becomes the root folder in the workspace and you can continue executing the other commands from here
-
-
 
 #### Service Fabric: Add Service
 The Service Fabric: Add Service command allows you to create a new service to an existing Service Fabric application. The application that the service will be added to must be the root directory of the workspace.
@@ -115,18 +102,14 @@ The Service Fabric: Build Application command can build either Java or C# Servic
 
    ## NOTE : Service Fabric Java applications can be developed on windows but only can be deployed onto Linux Clusters.
 
-## Release Notes
-
-### 1.0.0
-
-Initial release of Service Fabric for VS Code. In this release the extension adds support for 
-creating, building, and deploying applications within the VS Code editor.
-
 -----------------------------------------------------------------------------------------------------------
 
 # Legal
 
 Before we can accept your pull request you will need to sign a **Contribution License Agreement**. All you need to do is to submit a pull request, then the PR will get appropriately labelled (e.g. `cla-required`, `cla-norequired`, `cla-signed`, `cla-already-signed`). If you already signed the agreement we will continue with reviewing the PR, otherwise system will tell you how you can sign the CLA. Once you sign the CLA all future PR's will be labeled as `cla-signed`.
+
+## Contributing 
+[Contributing](https://github.com/Azure/service-fabric-vscode/blob/master/CONTRIBUTING.md)
 
 ## Code of Conduct
 
