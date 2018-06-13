@@ -1,9 +1,9 @@
 {
-    "name": "vscode-servicefabric",
-    "displayName": "vscode-servicefabric",
+    "name": "vscode-service-fabric-reliable-services",
+    "displayName": "vscode-service-fabric-reliable-services",
     "description": "",
-    "version": "0.0.1",
-    "publisher": "ppogo",
+    "version": "0.1.0",
+    "publisher": "ms-azuretools",
     "engines": {
         "vscode": "^1.16.0"
     },
