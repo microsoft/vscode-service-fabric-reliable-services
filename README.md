@@ -109,7 +109,7 @@ The Service Fabric: Build Application command can build either Java or C# Servic
 Before we can accept your pull request you will need to sign a **Contribution License Agreement**. All you need to do is to submit a pull request, then the PR will get appropriately labelled (e.g. `cla-required`, `cla-norequired`, `cla-signed`, `cla-already-signed`). If you already signed the agreement we will continue with reviewing the PR, otherwise system will tell you how you can sign the CLA. Once you sign the CLA all future PR's will be labeled as `cla-signed`.
 
 ## Contributing 
-[Contributing](https://github.com/Azure/service-fabric-vscode/blob/master/CONTRIBUTING.md)
+[Contributing](https://github.com/Microsoft/service-fabric-vscode-reliable-services/blob/master/CONTRIBUTING.md)
 
 ## Code of Conduct
 
