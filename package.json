@@ -1,15 +1,29 @@
 {
     "name": "vscode-service-fabric-reliable-services",
-    "displayName": "vscode-service-fabric-reliable-services",
-    "description": "",
+    "displayName": "Service Fabric Reliable Services",
+    "description": "Service Fabric Reliable Services extension for VSCode",
     "version": "0.1.0",
     "publisher": "ms-azuretools",
+    "icon": "media/service-fabric.png",
     "engines": {
         "vscode": "^1.16.0"
     },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Microsoft/vscode-service-fabric-reliable-services"
+    },
+    "galleryBanner": {
+        "color": "#3c3c3c",
+        "theme": "dark"
+    },
     "categories": [
-        "Other"
+        "Azure"
     ],
+    "keywords": [
+        "Azure",
+        "ServiceFabric"
+    ],
+    "preview": true,
     "activationEvents": [
         "onCommand:vscode-sf.addSFService",
         "onCommand:vscode-sf.buildApplication",
