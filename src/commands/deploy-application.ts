@@ -40,12 +40,10 @@ export async function deployApplication() {
 
 async function installApplication(terminal:vscode.Terminal) {
     var uri: vscode.Uri[] = null;
-    if (vars._isWindows) {
-         uri = await vscode.workspace.findFiles('**/install' + installScriptExtension);
-         if (uri.length < 1) {
-            vscode.window.showErrorMessage("An install file was not found in the workspace");
-            return;     
-        }
+    uri = await vscode.workspace.findFiles('**/install' + installScriptExtension);
+    if (uri.length < 1) {
+        vscode.window.showErrorMessage("An install file was not found in the workspace");
+        return;     
     }
     const relativeInstallPath = vscode.workspace.asRelativePath(uri[0]);
     terminal.sendText('./' + relativeInstallPath);

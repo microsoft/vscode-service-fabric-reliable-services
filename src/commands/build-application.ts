@@ -56,8 +56,7 @@ export async function buildGradleApplication() {
 
 export async function buildCSharpApplication(showTerminal:boolean) {
     var uris: vscode.Uri[] = null;
-    if (vars._isWindows)
-        uris = await vscode.workspace.findFiles('**/build' + builScriptExtension);
+    uris = await vscode.workspace.findFiles('**/build' + builScriptExtension);
     if (uris.length < 1) {
         vscode.window.showErrorMessage("A build file was not found in the workspace");
         return 1;

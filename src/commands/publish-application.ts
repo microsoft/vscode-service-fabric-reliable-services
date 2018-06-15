@@ -75,12 +75,10 @@ async function deployToSecureClusterCert(clusterInfo) {
 async function installApplication() {
     console.log("Install Application");
     var uri: vscode.Uri[] = null;
-    if (vars._isWindows) {
-         uri = await vscode.workspace.findFiles('**/install' + installScriptExtension);
-         if (uri.length < 1) {
-            vscode.window.showErrorMessage("An install file was not found in the workspace");
-            return;     
-        }
+    uri = await vscode.workspace.findFiles('**/install' + installScriptExtension);
+    if (uri.length < 1) {
+        vscode.window.showErrorMessage("An install file was not found in the workspace");
+        return;     
     }
     const relativeInstallPath = vscode.workspace.asRelativePath(uri[0]);
     const terminal: vscode.Terminal = vscode.window.createTerminal('ServiceFabric');
