@@ -56,7 +56,7 @@ async function deployToUnsecureCluster(clusterInfo) {
 
 async function deployToSecureClusterCert(clusterInfo) {
     var terminal: vscode.Terminal = vscode.window.createTerminal('ServiceFabric');
-    if (vars._isLinux || vars._isWindows) {
+    if (vars._isLinux || vars._isMacintosh) {
         exec('sfctl cluster select --endpoint ' + clusterInfo.ConnectionIPOrURL + ':' + clusterInfo.ConnectionPort + ' --cert ' + clusterInfo.ClientCert + ' --key ' + clusterInfo.ClientKey + ' --no-verify', function (err, stdout, stderr) {
             if (err) {
                 vscode.window.showErrorMessage("Could not connect to cluster.");
