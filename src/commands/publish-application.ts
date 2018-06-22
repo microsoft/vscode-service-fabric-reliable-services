@@ -94,7 +94,8 @@ async function readCloudProfile() {
         if (err) {
             throw err;
         }
-        var clusterInfo = JSON.parse(data);
+        var clusterData = JSON.parse(data);
+        var clusterInfo = clusterData.ClusterConnectionParameters;
         if (clusterInfo.ClientCert.length > 0 || clusterInfo.ClientCertThumbprint.length > 0) {
             deployToSecureClusterCert(clusterInfo);
         } else {

@@ -21,6 +21,7 @@ export async function removeApplication() {
 
 async function connectToCluster() {
     var fs = require('fs');
+    var clusterData;
     var clusterInfo;
 
     const cloudProfile: vscode.Uri[] = await vscode.workspace.findFiles('**/Cloud.json');
@@ -30,7 +31,8 @@ async function connectToCluster() {
         if (err) {
             throw err;
         }
-        clusterInfo = JSON.parse(data);
+        clusterData = JSON.parse(data);
+        clusterInfo = clusterData.ClusterConnectionParameters;
         if (clusterInfo.ClientCert.length > 0) {
             connectToSecureCluster(clusterInfo);
         } else {
@@ -78,7 +80,7 @@ async function connectToUnsecureCluster(clusterInfo) {
     }
     else {
         if (vars._isLinux || vars._isMacintosh) {
-            exec('sfctl cluster select --endpoint http://localhost:10550', function (err, stdout, stderr) {
+            exec('sfctl cluster select --endpoint http://localhost:19080', function (err, stdout, stderr) {
             if (err) {
                 vscode.window.showErrorMessage("Could not connect to cluster.");
                 console.log(err);
