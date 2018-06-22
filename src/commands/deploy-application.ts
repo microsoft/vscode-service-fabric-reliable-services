@@ -18,7 +18,7 @@ else{
 export async function deployApplication() {
     var terminal : vscode.Terminal = vscode.window.createTerminal('ServiceFabric');
     if (vars._isLinux || vars._isMacintosh) {
-        exec('sfctl cluster select --endpoint http://localhost:10550', function (err, stdout, stderr) {
+        exec('sfctl cluster select --endpoint http://localhost:19080', function (err, stdout, stderr) {
             if (err) {
                 vscode.window.showErrorMessage("Could not connect to cluster.");
                 console.log(err);

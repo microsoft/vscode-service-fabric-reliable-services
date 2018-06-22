@@ -50,7 +50,7 @@ export async function buildGradleApplication() {
     let projectUri = vscode.Uri.parse(projectPath);
 
     const terminal: vscode.Terminal = vscode.window.createTerminal('ServiceFabric');
-    terminal.sendText('gradle build ');
+    terminal.sendText('gradle ');
     terminal.show();
 }
 
