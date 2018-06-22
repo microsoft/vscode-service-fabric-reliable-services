@@ -55,7 +55,7 @@ function connectToSecureCluster(clusterInfo) {
         });
     }
     else if(vars._isWindows){
-        terminal.sendText("Connect-ServiceFabricCluster --ConnectionEndPoint "+ clusterInfo.ConnectionIPOrURL + ':' + clusterInfo.ConnectionPort + " -X509Credential -ServerCertThumbprint " + clusterInfo.ServerCertThumbprint + "-FindType FindByThumbprint -FindValue " + clusterInfo.ClientCertThumbprint +" -StoreLocation CurrentUser -StoreName My");
+        terminal.sendText("Connect-ServiceFabricCluster -ConnectionEndPoint "+ clusterInfo.ConnectionIPOrURL + ':' + clusterInfo.ConnectionPort + " -X509Credential -ServerCertThumbprint " + clusterInfo.ServerCertThumbprint + " -FindType FindByThumbprint -FindValue " + clusterInfo.ClientCertThumbprint +" -StoreLocation CurrentUser -StoreName My");
         terminal.show();
     }
     uninstallApplication(terminal);    
@@ -74,7 +74,7 @@ async function connectToUnsecureCluster(clusterInfo) {
             });
         }
         else if (vars._isWindows) {
-            terminal.sendText("Connect-ServiceFabricCluster --ConnectionEndPoint "+ clusterInfo.ConnectionIPOrURL + ':' + clusterInfo.ConnectionPort);
+            terminal.sendText("Connect-ServiceFabricCluster -ConnectionEndPoint "+ clusterInfo.ConnectionIPOrURL + ':' + clusterInfo.ConnectionPort);
             terminal.show();
         }
     }

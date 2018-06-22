@@ -32,7 +32,7 @@ async function deployToUnsecureCluster(clusterInfo) {
             });
         }
         else if (vars._isWindows) {
-            terminal.sendText("Connect-ServiceFabricCluster --ConnectionEndPoint "+ clusterInfo.ConnectionIPOrURL + ':' + clusterInfo.ConnectionPort);
+            terminal.sendText("Connect-ServiceFabricCluster -ConnectionEndPoint "+ clusterInfo.ConnectionIPOrURL + ':' + clusterInfo.ConnectionPort);
             terminal.show();
         }
     }
