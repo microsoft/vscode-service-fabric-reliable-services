@@ -18,6 +18,9 @@ const getNpmPaths = function () {
 	// Get the npm path from the user env variables.
 	const paths = process.env.PATH.split(path.delimiter).map(item => path.join(item, '..', 'lib', 'node_modules'));
 
+	// Add npm path by running npm root command
+	paths.push(childProcess.execSync('npm root -g', {encoding: 'utf8'}).toString().trim());
+
 	// Default paths for each system
 	if (win32) {
 		paths.push(path.join(process.env.APPDATA, 'npm', 'node_modules'));

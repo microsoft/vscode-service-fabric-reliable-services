@@ -32,13 +32,13 @@ async function deployToUnsecureCluster(clusterInfo) {
             });
         }
         else if (vars._isWindows) {
-            terminal.sendText("Connect-ServiceFabricCluster --ConnectionEndPoint "+ clusterInfo.ConnectionIPOrURL + ':' + clusterInfo.ConnectionPort);
+            terminal.sendText("Connect-ServiceFabricCluster -ConnectionEndPoint "+ clusterInfo.ConnectionIPOrURL + ':' + clusterInfo.ConnectionPort);
             terminal.show();
         }
     }
     else {
         if (vars._isLinux || vars._isMacintosh) {
-            exec('sfctl cluster select --endpoint http://localhost:10550', function (err, stdout, stderr) {
+            exec('sfctl cluster select --endpoint http://localhost:19080', function (err, stdout, stderr) {
             if (err) {
                 vscode.window.showErrorMessage("Could not connect to cluster.");
                 console.log(err);
@@ -51,7 +51,7 @@ async function deployToUnsecureCluster(clusterInfo) {
             terminal.show();
         }
     }
-    installApplication();
+    installApplication(terminal);
 }
 
 async function deployToSecureClusterCert(clusterInfo) {
@@ -66,13 +66,13 @@ async function deployToSecureClusterCert(clusterInfo) {
         });
     }
     else if (vars._isWindows) {
-        terminal.sendText("Connect-ServiceFabricCluster --ConnectionEndPoint "+ clusterInfo.ConnectionIPOrURL + ':' + clusterInfo.ConnectionPort + " -X509Credential -ServerCertThumbprint " + clusterInfo.ServerCertThumbprint + "-FindType FindByThumbprint -FindValue " + clusterInfo.ClientCertThumbprint +" -StoreLocation CurrentUser -StoreName My");
         terminal.show();
+        terminal.sendText("Connect-ServiceFabricCluster -ConnectionEndPoint "+ clusterInfo.ConnectionIPOrURL + ':' + clusterInfo.ConnectionPort + " -X509Credential -ServerCertThumbprint " + clusterInfo.ServerCertThumbprint + " -FindType FindByThumbprint -FindValue " + clusterInfo.ClientCertThumbprint +" -StoreLocation CurrentUser -StoreName My");
     }
-    installApplication();
+    installApplication(terminal);
 }
 
-async function installApplication() {
+async function installApplication(terminal:vscode.Terminal) {
     console.log("Install Application");
     var uri: vscode.Uri[] = null;
     uri = await vscode.workspace.findFiles('**/install' + installScriptExtension);
@@ -81,7 +81,6 @@ async function installApplication() {
         return;     
     }
     const relativeInstallPath = vscode.workspace.asRelativePath(uri[0]);
-    const terminal: vscode.Terminal = vscode.window.createTerminal('ServiceFabric');
     terminal.sendText('./' + relativeInstallPath);
     terminal.show();
 }
@@ -95,8 +94,9 @@ async function readCloudProfile() {
         if (err) {
             throw err;
         }
-        var clusterInfo = JSON.parse(data);
-        if (clusterInfo.ClientCert.length > 0) {
+        var clusterData = JSON.parse(data);
+        var clusterInfo = clusterData.ClusterConnectionParameters;
+        if (clusterInfo.ClientCert.length > 0 || clusterInfo.ClientCertThumbprint.length > 0) {
             deployToSecureClusterCert(clusterInfo);
         } else {
             deployToUnsecureCluster(clusterInfo);

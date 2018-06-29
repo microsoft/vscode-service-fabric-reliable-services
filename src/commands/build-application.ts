@@ -50,7 +50,7 @@ export async function buildGradleApplication() {
     let projectUri = vscode.Uri.parse(projectPath);
 
     const terminal: vscode.Terminal = vscode.window.createTerminal('ServiceFabric');
-    terminal.sendText('gradle build ');
+    terminal.sendText('gradle ');
     terminal.show();
 }
 
@@ -106,14 +106,16 @@ function replaceBuildPath(filePath) {
 }
 
 async function createPublishProfile() {
-    var publishParams = { 
-        ConnectionIPOrURL: '',
-        ConnectionPort: '19080',
-        ClientKey: '',
-        ClientCert: '',
-        ServerCertThumbprint: '',
-        ClientCertThumbprint: ''
-         };
+    var publishParams = {
+        ClusterConnectionParameters: {
+            ConnectionIPOrURL: '',
+            ConnectionPort: '19080',
+            ClientKey: '',
+            ClientCert: '',
+            ServerCertThumbprint: '',
+            ClientCertThumbprint: ''
+        }
+    };
     var publishParamsJson = JSON.stringify(publishParams, null, 4);
 
     var uri: vscode.Uri[] = null;
