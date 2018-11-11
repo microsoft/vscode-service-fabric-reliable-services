@@ -48,6 +48,7 @@ The Service Fabric extension for VS Code helps developers to create and deploy S
 * Service Fabric: Remove Application
 * Service Fabric: Build Application
 * Service Fabric: Clean Application
+* Service Fabric: Upgrade Application
 
 #### Service Fabric: Create Application
 
@@ -85,6 +86,16 @@ The Service Fabric: Deploy Application command deploys your Service Fabric appli
 1.  Select the command Service Fabric: Deploy Application
 2.  View the Service Fabric Explorer of the local cluster to ensure that the application has been installed
 3.  One can also use Service Fabric: Publish Application command with no paramters in Cloud.json file to deploy to a local cluster
+
+#### Service Fabric: Upgrade Application
+The Service Fabric: Upgrade Application command deploys a new version of your Service Fabric application on a remote cluster the can be either secure or unsecure or on a local cluster if parameters are not mentioned in Cloud.json
+
+1.  The first time that the application is built, a Cloud.json file will be generated in the project directory
+2.  Input the values for the cluster that you would like to connect in the Cloud.json file
+3.  Set the ApplicationTypeVersion in the ApplicationManifest file
+4.  Select the command Service Fabric: Upgrade Application
+5.  View the Service Fabric Explorer of the desired cluster to ensure that the application has been upgraded
+    Note : If required parameters are not mentioned then the application will be deployed to local cluster(if available)
 
 #### Service Fabric: Remove Application
 The Service Fabric: Remove Application command removes a Service Fabric application from the cluster that it was deployed to through the VS Code extension.

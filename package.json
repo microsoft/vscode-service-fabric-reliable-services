@@ -31,7 +31,8 @@
         "onCommand:vscode-sf.createApplication",
         "onCommand:vscode-sf.deployApplication",
         "onCommand:vscode-sf.publishApplication",
-        "onCommand:vscode-sf.removeApplication"
+        "onCommand:vscode-sf.removeApplication",
+        "onCommand:vscode-sf.upgradeApplication"
     ],
     "main": "./out/src/extension",
     "contributes": {
@@ -70,6 +71,11 @@
                 "command": "vscode-sf.createApplication",
                 "title": "Create Application",
                 "category": "Service Fabric"
+            },
+            {
+                "command": "vscode-sf.upgradeApplication",
+                "title": "Upgrade Application",
+                "category": "Service Fabric"
             }
         ],
         "menus": {
@@ -92,6 +98,10 @@
                 },
                 {
                     "command": "vscode-sf.removeApplication",
+                    "group": "navigation"
+                },
+                {
+                    "command": "vscode-sf.upgradeApplication",
                     "group": "navigation"
                 }
             ],
