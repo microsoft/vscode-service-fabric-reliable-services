@@ -100,7 +100,6 @@ async function readVersionFromManifest(): Promise<string> {
     var parseString = require('xml2js').parseString;
 
     parseString(manifest, function(err, result) {
-        console.dir(result);
         manifestJs = result;
     });
 
