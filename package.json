@@ -133,7 +133,8 @@
         "mocha": "^3.5.3",
         "ts-node": "^6.0.3",
         "typescript": "~2.8.4",
-        "vscode": "^1.1.5"
+        "vscode": "^1.1.5",
+        "xml2js": "^0.4.19"
     },
     "dependencies": {
         "array-uniq": "^1.0.2",
