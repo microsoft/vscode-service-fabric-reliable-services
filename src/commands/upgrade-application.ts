@@ -96,10 +96,14 @@ async function readVersionFromManifest(): Promise<string> {
     const cloudProfile: vscode.Uri[] = await vscode.workspace.findFiles('**/ApplicationManifest.xml');
     const pathToCloudProfile = cloudProfile[0].fsPath.replace('/c:', '');
     const manifest = fs.readFileSync(pathToCloudProfile).toString('utf8');
+    var manifestJs;
+    var parseString = require('xml2js').parseString;
 
-    var rx = /ApplicationTypeVersion=\"(.*)\"/g;
-    var arr = rx.exec(manifest);
-    var version = arr[1];
+    parseString(manifest, function(err, result) {
+        manifestJs = result;
+    });
+
+    var version = manifestJs['ApplicationManifest']['$']['ApplicationTypeVersion'];
     return version;
 }
 
