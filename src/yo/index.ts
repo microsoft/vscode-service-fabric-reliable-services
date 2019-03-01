@@ -1,9 +1,10 @@
 'use strict';
 
-import { window, workspace, commands, ExtensionContext, QuickPickItem, InputBoxOptions } from 'vscode';
+import { window, workspace, commands, ExtensionContext, QuickPickItem, InputBoxOptions, Uri } from 'vscode';
 import EscapeException from './utils/EscapeException';
 import runAsync from './utils/run-async';
 import Yeoman from './yo/yo';
+import * as _ from 'lodash';
 
 import * as path from 'path';
 const fs = require('fs');
@@ -52,17 +53,28 @@ export async function generatorProject(addService) {
 
 	sub = subGenerator;
 
+	var beforeYo = getAllDirs(cwd);
+	var afterYo;
 	try {
-		const question: string = await yo.run(`${main}:${sub}`, cwd) as string;
-		if (!question) {
-			return;
-		}
-		const input = window.showInputBox({ prompt: question })
-		if (!input) {
-			return;
-		}
-		const argument = input;
-		await yo.run(`${main}:${sub} ${argument}`, cwd);
+		// var yoPromise = yo.run(`${main}:${sub}`, cwd);
+		yo.run(`${main}:${sub}`, cwd).then(_p => {
+			afterYo = getAllDirs(cwd);
+			var newApp = _.difference(afterYo, beforeYo);
+			if (newApp.length > 0) {
+				openFolder(newApp[0]);
+			}
+		});
+		// TODO does this mess with java? or other generators? gotta check
+		// const question: string = await yoPromise as string;
+		// if (!question) {
+		// 	return;
+		// }
+		// const input = window.showInputBox({ prompt: question })
+		// if (!input) {
+		// 	return;
+		// }
+		// const argument = input;
+		// await yo.run(`${main}:${sub} ${argument}`, cwd);
 
 	} catch (err) {
 		const regexp = new RegExp('Did not provide required argument (.*?)!', 'i');
@@ -77,6 +89,20 @@ export async function generatorProject(addService) {
 		window.showErrorMessage(err.message || err);
 	}
 }
+
+function openFolder(folderPath: string) {
+	let uri = Uri.file(folderPath);
+	commands.executeCommand('vscode.openFolder', uri);
+}
+
+function getAllDirs(folderPath: string) {
+	const fs = require('fs');
+	const path = require('path');
+	return fs.readdirSync(folderPath)
+	.map(name => path.join(folderPath, name))
+	.filter(filePath => fs.lstatSync(filePath).isDirectory())
+}
+
 
 function runSubGenerators(subGenerators: string[]) {
 	const app = `${figures.star} app`;

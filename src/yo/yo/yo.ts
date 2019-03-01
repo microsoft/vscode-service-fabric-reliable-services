@@ -112,9 +112,10 @@ export default class Yeoman {
 							.on('end', () => {
 								this.clearState();
 								console.log(`${EOL}${figures.tick} done`);
+								// does this mess with java? or other generators? gotta check
+								// bringing resolve() to 'end'
+								resolve();
 							});
-
-						resolve();
 					} catch (err) {
 						reject(err);
 					}
