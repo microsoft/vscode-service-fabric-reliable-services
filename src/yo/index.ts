@@ -56,7 +56,6 @@ export async function generatorProject(addService) {
 	var beforeYo = getAllDirs(cwd);
 	var afterYo;
 	try {
-		// var yoPromise = yo.run(`${main}:${sub}`, cwd);
 		yo.run(`${main}:${sub}`, cwd).then(_p => {
 			afterYo = getAllDirs(cwd);
 			var newApp = _.difference(afterYo, beforeYo);
@@ -64,18 +63,6 @@ export async function generatorProject(addService) {
 				openFolder(newApp[0]);
 			}
 		});
-		// TODO does this mess with java? or other generators? gotta check
-		// const question: string = await yoPromise as string;
-		// if (!question) {
-		// 	return;
-		// }
-		// const input = window.showInputBox({ prompt: question })
-		// if (!input) {
-		// 	return;
-		// }
-		// const argument = input;
-		// await yo.run(`${main}:${sub} ${argument}`, cwd);
-
 	} catch (err) {
 		const regexp = new RegExp('Did not provide required argument (.*?)!', 'i');
 
