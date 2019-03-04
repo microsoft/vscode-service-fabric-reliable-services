@@ -87,9 +87,8 @@ function getAllDirs(folderPath: string) {
 	const path = require('path');
 	return fs.readdirSync(folderPath)
 	.map(name => path.join(folderPath, name))
-	.filter(filePath => fs.lstatSync(filePath).isDirectory())
+	.filter(filePath => fs.lstatSync(filePath).isDirectory());
 }
-
 
 function runSubGenerators(subGenerators: string[]) {
 	const app = `${figures.star} app`;
