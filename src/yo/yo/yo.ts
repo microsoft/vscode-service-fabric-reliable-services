@@ -112,9 +112,8 @@ export default class Yeoman {
 							.on('end', () => {
 								this.clearState();
 								console.log(`${EOL}${figures.tick} done`);
+								resolve();
 							});
-
-						resolve();
 					} catch (err) {
 						reject(err);
 					}
