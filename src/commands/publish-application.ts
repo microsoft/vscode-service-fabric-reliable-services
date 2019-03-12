@@ -88,8 +88,12 @@ async function installApplication(terminal:vscode.Terminal) {
 async function readCloudProfile() {
     var fs = require('fs');
     const cloudProfile: vscode.Uri[] = await vscode.workspace.findFiles('**/Cloud.json');
-    const pathToCloudProfile = cloudProfile[0].fsPath.replace('/c:', '');
+    if (cloudProfile.length < 1) {
+        vscode.window.showErrorMessage("Could not find configuration file Cloud.json. Please ensure that the application package is built using the build command before executing publish.");
+        return;
+    }
 
+    const pathToCloudProfile = cloudProfile[0].fsPath.replace('/c:', '');
     await fs.readFile(pathToCloudProfile, 'utf8', function (err, data) {
         if (err) {
             throw err;
