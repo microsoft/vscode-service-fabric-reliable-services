@@ -89,7 +89,7 @@ async function readCloudProfile() {
     var fs = require('fs');
     const cloudProfile: vscode.Uri[] = await vscode.workspace.findFiles('**/Cloud.json');
     if (cloudProfile.length < 1) {
-        vscode.window.showErrorMessage("Could not find configuration file Cloud.json. Please ensure you have run the build command.");
+        vscode.window.showErrorMessage("Could not find configuration file Cloud.json. Please ensure that the application package is built using the build command before executing publish.");
         return;
     }
 
