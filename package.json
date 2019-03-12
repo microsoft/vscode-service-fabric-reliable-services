@@ -97,6 +97,10 @@
                     "group": "navigation"
                 },
                 {
+                    "command": "vscode-sf.publishApplication",
+                    "group": "navigation"
+                },
+                {
                     "command": "vscode-sf.removeApplication",
                     "group": "navigation"
                 },
