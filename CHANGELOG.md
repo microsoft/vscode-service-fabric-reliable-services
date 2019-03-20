@@ -3,6 +3,9 @@ All notable changes to the "vscode-servicefabric" extension will be documented i
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## Version [0.1.5]
+- Add Publish application menu item in context menu
+
 ## Version [0.1.4]
 - Open the yo generated project in vscode workspace
 - Fix yo process not terminating which causes VSCode input menu to hang
