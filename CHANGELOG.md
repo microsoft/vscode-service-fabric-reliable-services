@@ -3,6 +3,9 @@ All notable changes to the "vscode-servicefabric" extension will be documented i
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## Version [0.1.6]
+- Fix security vulnerability in `diff` package
+
 ## Version [0.1.5]
 - Add Publish application menu item in context menu
 
@@ -14,6 +17,3 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## Version [0.1.3]
 - Fix security vulnerability in `lodash` package
 - Fix issue in Application Upgrade command
-
-## [Unreleased]
-- Initial release
