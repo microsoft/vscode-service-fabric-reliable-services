@@ -4,6 +4,7 @@ import { win32 } from "path";
 import * as vars from './osdetector';
 import { resolve } from "url";
 
+
 var builScriptExtension;
 var installScriptExtension;
 
@@ -97,7 +98,13 @@ function replaceBuildPath(filePath) {
         if (err) {
             return console.log(err);
         }
+        if(!vars._isWindows){
         var result = data.replace(/\\/g, "/");
+        }
+        else
+        {
+            var result=data;
+        }
 
         fs.writeFile(filePath, result, 'utf8', function (err) {
             if (err) return console.log(err);
@@ -134,3 +141,23 @@ async function createPublishProfile() {
         console.log('Completed!');
     });
 }
+
+
+/*function dumpfolder(){
+    const fs = require('fs');
+
+// destination.txt will be created or overwritten by default.
+fs.copyFile(path.join(x,tst.appname,'ApplicationPackageRoot','ApplicationManifest.xml'), path.join(x,tst.appname,tst.appname,'ApplicationManifest.xml'), (err) => {
+  if (err) throw err;
+  console.log('copy success');
+});
+var i;
+for(i=0;i<tst.numofservices;i++)
+{
+fs.copyFile(path.join(x,tst.serviceProjName[i],'PackageRoot'), path.join(x,tst.appname,tst.appname,tst.servicePackage[i]), (err) => {
+    if (err) throw err;
+    console.log('copy success');
+  });
+
+}
+}*/

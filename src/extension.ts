@@ -9,6 +9,7 @@ import { deployApplication } from './commands/deploy-application';
 import { publishApplication } from './commands/publish-application';
 import { removeApplication } from './commands/remove-application';
 import { upgradeApplication } from './commands/upgrade-application';
+import { openVSproject } from './commands/open-VS-project';
 
 // This method is called when your extension is activated. Activation is
 // controlled by the activation events defined in package.json.
@@ -27,4 +28,5 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(commands.registerCommand('vscode-sf.publishApplication', publishApplication));
     context.subscriptions.push(commands.registerCommand('vscode-sf.removeApplication', removeApplication));
     context.subscriptions.push(commands.registerCommand('vscode-sf.upgradeApplication', upgradeApplication));
+    context.subscriptions.push(commands.registerCommand('vscode-sf.openVSproject', openVSproject));
 }

@@ -10,8 +10,8 @@ import * as path from 'path';
 const fs = require('fs');
 const figures = require('figures');
 const opn = require('opn');
-
-async function getWorkingFolder() {
+ 
+export async function getWorkingFolder() {
 	if (!Array.isArray(workspace.workspaceFolders) || workspace.workspaceFolders.length === 0) {
 		return undefined;
 	}
@@ -23,11 +23,12 @@ async function getWorkingFolder() {
 	return selectedWkFolder ? selectedWkFolder.uri.fspath : undefined;
 }
 
-export async function generatorProject(addService) {
+export async function generatorProject(addService,openVSproject) {
 	const cwd = await getWorkingFolder();
 	if (!cwd) {
 		window.showErrorMessage('Please open a workspace directory first.');
 		return;
+	
 	}
 
 	const yo = new Yeoman({ cwd });
@@ -43,8 +44,12 @@ export async function generatorProject(addService) {
 	let subGenerator: string;
 	if ((generator as any).subGenerators.length > 1 && addService) {
 		subGenerator = await runSubGenerators((generator as any).subGenerators);
-	} else {
+	} 
+	if (!addService&&!openVSproject){
 		subGenerator = 'app';
+	}
+	if(openVSproject){
+		subGenerator='openVSproject';
 	}
 
 	if (subGenerator === undefined) {
@@ -59,7 +64,7 @@ export async function generatorProject(addService) {
 		yo.run(`${main}:${sub}`, cwd).then(_p => {
 			afterYo = getAllDirs(cwd);
 			var newApp = _.difference(afterYo, beforeYo);
-			if (newApp.length > 0) {
+			if (newApp.length > 0&&!addService) {
 				openFolder(newApp[0]);
 			}
 		});
@@ -75,6 +80,7 @@ export async function generatorProject(addService) {
 		}
 		window.showErrorMessage(err.message || err);
 	}
+	
 }
 
 function openFolder(folderPath: string) {
@@ -93,9 +99,16 @@ function getAllDirs(folderPath: string) {
 function runSubGenerators(subGenerators: string[]) {
 	const app = `${figures.star} app`;
 	const index = subGenerators.indexOf('app');
+	
 
 	if (index !== -1) {
 		subGenerators.splice(index, 1);
+	}
+
+	const openVSProjectIndex = subGenerators.indexOf('openVSproject');
+
+	if (index != -1) {
+		subGenerators.splice(openVSProjectIndex, 1);
 	}
 
 	return window.showQuickPick(subGenerators)
@@ -138,6 +151,7 @@ function list(yo: Yeoman): Promise<QuickPickItem[]> {
 					|| generator.label === 'azuresfcontainer' 
 					|| generator.label === 'azuresfguest'
 				})
+				
 				resolve(azureGenerators);
 			});
 		});
