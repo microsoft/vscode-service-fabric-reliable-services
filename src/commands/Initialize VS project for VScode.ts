@@ -19,9 +19,13 @@ import {getWorkingFolder} from '../yo';
      var isVS=1;
     }
     var appname=path.basename(files[0]).split('.').slice(0, -1).join('.');
-     var serviceNameStr = new Array();
-    var serviceProjName=new Array();
+     var services = [];
+   var serviceProjName=new Array();
     var servicePackage=new Array();
+    var serviceNameStr=new Array();
+    var csprojdata=new Array();
+    var interfaceprojpath=new Array();
+    var csprojinfo;
      var appPackagePath=appname;
      var i;
     /*var files=await fs.readdirSync(x);
@@ -31,12 +35,15 @@ import {getWorkingFolder} from '../yo';
      await parseString(data, function(err, result) {
          configjs = result;
     });
+  
      var numofservices = Object.keys(configjs["Project"]["ItemGroup"][3]["ProjectReference"]).length;
   for(i=0;i<numofservices;i++)
  {
- serviceNameStr[i]=configjs["Project"]["ItemGroup"][3]["ProjectReference"][i]["$"]["Include"];
+    serviceNameStr[i]=configjs["Project"]["ItemGroup"][3]["ProjectReference"][i]["$"]["Include"];
+    
  }
- ;
+
+ 
 
  for(i=0;i<numofservices;i++)
  {
@@ -44,25 +51,37 @@ import {getWorkingFolder} from '../yo';
   serviceProjName[i]=serviceNameStr[i].substring(
     
 
-     serviceNameStr[i].lastIndexOf("\\")+1 , 
-     serviceNameStr[i].lastIndexOf(".")
+    serviceNameStr[i].lastIndexOf("\\")+1 , 
+    serviceNameStr[i].lastIndexOf(".")
  );
- };
- for(i=0;i<numofservices;i++)
- {
+     var root = await getWorkingFolder();
+     var p1=path.join(root,serviceProjName[i],serviceProjName[i]+'.csproj');
+     csprojdata[i]=fs.readFileSync(p1);
+        await parseString(csprojdata[i],function(err, result){
+        csprojinfo=result;
+    });
+    if(csprojinfo["Project"]["ItemGroup"][1]!=undefined)
+    {
+      interfaceprojpath[i]=csprojinfo["Project"]["ItemGroup"][1]["ProjectReference"][0]["$"]["Include"];
+    }
      servicePackage[i]=serviceProjName[i]+'Pkg';
+     if(interfaceprojpath==undefined){
+     services.push({serviceProjName:serviceProjName[i],servicePackage:servicePackage[i]});
+     }
+     else
+     {
+       services.push({serviceProjName:serviceProjName[i],servicePackage:servicePackage[i],interfaceprojpath:interfaceprojpath[i]});
+     }
  };
 
 
   var values={
-       numofservices:numofservices,
-       serviceNameStr:serviceNameStr,
-      serviceProjName:serviceProjName,
-      servicePackage:servicePackage,
-       appname:appname,
-   
-       isVS:isVS
-      }
+           appname:appname,
+           numofservices:numofservices,
+           services:services,
+          
+          }
+      console.log('building config file');
       await fs.writeFileSync(path.join(x,'vscode-config.json'),JSON.stringify(values),(err) => 
        
        {

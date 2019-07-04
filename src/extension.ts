@@ -9,7 +9,7 @@ import { deployApplication } from './commands/deploy-application';
 import { publishApplication } from './commands/publish-application';
 import { removeApplication } from './commands/remove-application';
 import { upgradeApplication } from './commands/upgrade-application';
-import { openVSproject } from './commands/open-VS-project';
+import { openVSproject } from './commands/Initialize VS project for VScode';
 
 // This method is called when your extension is activated. Activation is
 // controlled by the activation events defined in package.json.

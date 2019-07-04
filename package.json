@@ -80,7 +80,7 @@
             },
             {
                 "command": "vscode-sf.openVSproject",
-                "title": "open VS project",
+                "title": "Initialize VS project for VScode",
                 "category": "Service Fabric"
             }
         ],
@@ -161,6 +161,7 @@
         "fix-path": "^1.1.0",
         "is-fn": "^1.0.0",
         "opn": "^3.0.3",
+        "path": "^0.12.7",
         "read-pkg-up": "^1.0.1",
         "run-async": "^2.0.0",
         "semver": "^5.0.3",

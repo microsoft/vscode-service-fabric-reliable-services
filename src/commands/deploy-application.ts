@@ -1,7 +1,10 @@
 import * as vscode from "vscode";
 import * as vars from './osdetector';
+import {getWorkingFolder} from '../yo';
+var root=getWorkingFolder();
 const exec = require('child_process').exec;
-
+var fs=require('fs');
+var path=require('path');
 var builScriptExtension;
 var installScriptExtension;
 
@@ -14,6 +17,7 @@ else{
     builScriptExtension = '.sh';
     installScriptExtension = '.sh';
 }
+
 
 export async function deployApplication() {
     var terminal : vscode.Terminal = vscode.window.createTerminal('ServiceFabric');
