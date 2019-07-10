@@ -79,8 +79,7 @@ import {getWorkingFolder} from '../yo';
            appname:appname,
            numofservices:numofservices,
            services:services,
-          
-          }
+           }
       console.log('building config file');
       await fs.writeFileSync(path.join(x,'vscode-config.json'),JSON.stringify(values),(err) => 
        
