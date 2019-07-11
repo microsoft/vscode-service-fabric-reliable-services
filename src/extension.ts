@@ -10,6 +10,7 @@ import { publishApplication } from './commands/publish-application';
 import { removeApplication } from './commands/remove-application';
 import { upgradeApplication } from './commands/upgrade-application';
 import { openVSproject } from './commands/Initialize VS project for VScode';
+import { cleanCsharpApplication } from './commands/clean-application-csharp';
 
 // This method is called when your extension is activated. Activation is
 // controlled by the activation events defined in package.json.
@@ -29,4 +30,5 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(commands.registerCommand('vscode-sf.removeApplication', removeApplication));
     context.subscriptions.push(commands.registerCommand('vscode-sf.upgradeApplication', upgradeApplication));
     context.subscriptions.push(commands.registerCommand('vscode-sf.openVSproject', openVSproject));
+    context.subscriptions.push(commands.registerCommand('vscode-sf.cleanCsharpApplication', cleanCsharpApplication));
 }
