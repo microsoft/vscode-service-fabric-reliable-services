@@ -23,6 +23,7 @@ export async function getWorkingFolder() {
 	return selectedWkFolder ? selectedWkFolder.uri.fspath : undefined;
 }
 
+
 export async function generatorProject(addService,openVSproject) {
 	const cwd = await getWorkingFolder();
 	if (!cwd) {
@@ -34,8 +35,19 @@ export async function generatorProject(addService,openVSproject) {
 	const yo = new Yeoman({ cwd });
 	let main;
 	let sub;
-
-	const generator = await window.showQuickPick(list(yo));
+    var generator;
+	
+	if(openVSproject==false)
+	{
+	 generator = await window.showQuickPick(list(yo));
+	}
+	else
+	{
+		generator= {label: "azuresfcsharp", description: "Azure Service Fabric CSharp app template generator", subGenerators: Array(6)};
+		list(yo);
+	}
+	
+	
 	if (generator === undefined) {
 		return;
 	}
@@ -120,7 +132,6 @@ function runSubGenerators(subGenerators: string[]) {
 			return choice;
 		});
 }
-
 function list(yo: Yeoman): Promise<QuickPickItem[]> {
 	return new Promise((resolve, reject) => {
 		setImmediate(() => {
@@ -157,3 +168,4 @@ function list(yo: Yeoman): Promise<QuickPickItem[]> {
 		});
 	});
 }
+
