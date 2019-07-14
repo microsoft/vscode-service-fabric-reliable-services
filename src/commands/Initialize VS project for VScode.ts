@@ -3,15 +3,10 @@ import {window} from 'vscode';
 var path=require('path');
 var find=require('find');
 var fs=require('fs');
-
 import { generatorProject } from '../yo';
 import {getWorkingFolder} from '../yo';
 import {cleanCsharpApplication} from './clean-application-csharp';
-
   //var parser=new xml2js.Parser();
-
-  
-
  export async function openVSproject(){
      var x=await getWorkingFolder();
     var files = find.fileSync(/\.sfproj$/,x);
@@ -60,8 +55,12 @@ import {cleanCsharpApplication} from './clean-application-csharp';
     {
       interfaceprojpath[i]=csprojinfo["Project"]["ItemGroup"][1]["ProjectReference"][0]["$"]["Include"];
     }
-    
-     servicePackage[i]=serviceProjName[i]+'Pkg';
+    var servicemanifestdata;
+    await parseString(fs.readFileSync(path.join(root,serviceProjName[i],"PackageRoot","ServiceManifest.xml")),function(err,result){
+   servicemanifestdata=result;
+    });
+    servicePackage[i]=servicemanifestdata['ServiceManifest']['$']['Name'];
+
      if(interfaceprojpath==undefined){
      services.push({serviceProjName:serviceProjName[i],servicePackage:servicePackage[i]});
      }
