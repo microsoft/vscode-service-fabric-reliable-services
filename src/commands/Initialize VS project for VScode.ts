@@ -10,14 +10,17 @@ import {cleanCsharpApplication} from './clean-application-csharp';
 
   //var parser=new xml2js.Parser();
 
-
+  
 
  export async function openVSproject(){
      var x=await getWorkingFolder();
     var files = find.fileSync(/\.sfproj$/,x);
-    if(files[0]){
+    if(files.length){
      var data=fs.readFileSync(files[0]);
      var isVS=1;
+    }
+    else{
+      window.showErrorMessage("This is not a VS project");
     }
     var appname=path.basename(files[0]).split('.').slice(0, -1).join('.');
      var services = [];
@@ -27,8 +30,8 @@ import {cleanCsharpApplication} from './clean-application-csharp';
     var csprojdata=new Array();
     var interfaceprojpath=new Array();
     var csprojinfo;
-     var appPackagePath=appname;
-     var i;
+    var appPackagePath=appname;
+    var i;
     /*var files=await fs.readdirSync(x);
     var appname=files[1];*/
     var parseString = require('xml2js').parseString;
@@ -36,22 +39,14 @@ import {cleanCsharpApplication} from './clean-application-csharp';
      await parseString(data, function(err, result) {
          configjs = result;
     });
-  
      var numofservices = Object.keys(configjs["Project"]["ItemGroup"][3]["ProjectReference"]).length;
   for(i=0;i<numofservices;i++)
  {
-    serviceNameStr[i]=configjs["Project"]["ItemGroup"][3]["ProjectReference"][i]["$"]["Include"];
-    
+    serviceNameStr[i]=configjs["Project"]["ItemGroup"][3]["ProjectReference"][i]["$"]["Include"];  
  }
-
- 
-
  for(i=0;i<numofservices;i++)
  {
-  
   serviceProjName[i]=serviceNameStr[i].substring(
-    
-
     serviceNameStr[i].lastIndexOf("\\")+1 , 
     serviceNameStr[i].lastIndexOf(".")
  );
@@ -65,6 +60,7 @@ import {cleanCsharpApplication} from './clean-application-csharp';
     {
       interfaceprojpath[i]=csprojinfo["Project"]["ItemGroup"][1]["ProjectReference"][0]["$"]["Include"];
     }
+    
      servicePackage[i]=serviceProjName[i]+'Pkg';
      if(interfaceprojpath==undefined){
      services.push({serviceProjName:serviceProjName[i],servicePackage:servicePackage[i]});
@@ -74,23 +70,19 @@ import {cleanCsharpApplication} from './clean-application-csharp';
        services.push({serviceProjName:serviceProjName[i],servicePackage:servicePackage[i],interfaceprojpath:interfaceprojpath[i]});
      }
  };
-
-
   var values={
            appname:appname,
            numofservices:numofservices,
            services:services,
            }
-      console.log('building config file');
+      
       await fs.writeFileSync(path.join(x,'vscode-config.json'),JSON.stringify(values),(err) => 
-       
        {
            if(err) throw err;
        }
       );
       generatorProject(false,true);
       return new Promise((resolve, reject) => {
-    
         resolve();
     });
  };

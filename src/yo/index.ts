@@ -10,7 +10,7 @@ import * as path from 'path';
 const fs = require('fs');
 const figures = require('figures');
 const opn = require('opn');
- 
+
 export async function getWorkingFolder() {
 	if (!Array.isArray(workspace.workspaceFolders) || workspace.workspaceFolders.length === 0) {
 		return undefined;
@@ -26,13 +26,14 @@ export async function getWorkingFolder() {
 
 export async function generatorProject(addService,openVSproject) {
 	const cwd = await getWorkingFolder();
+	const configfilename='vscode-config.json';
 	if (!cwd) {
 		window.showErrorMessage('Please open a workspace directory first.');
 		return;
 	
 	}
 
-	const yo = new Yeoman({ cwd });
+	const yo = new Yeoman({ cwd,configfilename });
 	let main;
 	let sub;
     var generator;
@@ -46,7 +47,6 @@ export async function generatorProject(addService,openVSproject) {
 		generator= {label: "azuresfcsharp", description: "Azure Service Fabric CSharp app template generator", subGenerators: Array(6)};
 		list(yo);
 	}
-	
 	
 	if (generator === undefined) {
 		return;
@@ -62,6 +62,7 @@ export async function generatorProject(addService,openVSproject) {
 	}
 	if(openVSproject){
 		subGenerator='openVSproject';
+		          
 	}
 
 	if (subGenerator === undefined) {
@@ -140,7 +141,8 @@ function list(yo: Yeoman): Promise<QuickPickItem[]> {
 					return {
 						label: generator.name.replace(/(^|\/)generator\-/i, '$1') as string,
 						description: generator.description,
-						subGenerators: generator.subGenerators
+						subGenerators: generator.subGenerators,
+
 					};
 				});
 
