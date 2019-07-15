@@ -36,16 +36,17 @@ export async function generatorProject(addService,openVSproject) {
 	const yo = new Yeoman({ cwd,configfilename });
 	let main;
 	let sub;
-    var generator;
+	var generator;
+	var root=await getWorkingFolder();
 	
-	if(openVSproject==false)
+	if(openVSproject==true||fs.existsSync(path.join(root,configfilename)))
 	{
-	 generator = await window.showQuickPick(list(yo));
+		generator= {label: "azuresfcsharp", description: "Azure Service Fabric CSharp app template generator", subGenerators: ["AddService", "app", "CoreCLRStatefulActor","CoreCLRStatefulService","CoreCLRStatelessService","openVSproject"]};
+		list(yo);
 	}
 	else
 	{
-		generator= {label: "azuresfcsharp", description: "Azure Service Fabric CSharp app template generator", subGenerators: Array(6)};
-		list(yo);
+		generator = await window.showQuickPick(list(yo));
 	}
 	
 	if (generator === undefined) {

@@ -49,6 +49,11 @@ export async function openVSproject() {
     await parseString(csprojdata[i], function (err, result) {
       csprojinfo = result;
     });
+    if(csprojinfo["Project"]["PropertyGroup"]["TargetFramework"]==undefined)
+    {
+      window.showErrorMessage("Full dotnet projects cannot be opened in VS Code");
+      return;
+    }
     if (csprojinfo["Project"]["ItemGroup"][1] != undefined) {
       interfaceprojpath[i] = csprojinfo["Project"]["ItemGroup"][1]["ProjectReference"][0]["$"]["Include"];
     }
@@ -70,7 +75,6 @@ export async function openVSproject() {
     numofservices: numofservices,
     services: services,
   }
-
   await fs.writeFileSync(path.join(x, 'vscode-config.json'), JSON.stringify(values), (err) => {
     if (err) throw err;
   }

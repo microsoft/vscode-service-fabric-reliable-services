@@ -36,8 +36,6 @@
         "onCommand:vscode-sf.openVSproject",
         "onCommand:vscode-sf.cleanCsharpApplication",
         "workspaceContains:*.sfproj"
-        
-
     ],
     "main": "./out/src/extension",
     "contributes": {
