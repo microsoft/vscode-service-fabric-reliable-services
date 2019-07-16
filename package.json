@@ -87,7 +87,7 @@
             },
             {
                 "command": "vscode-sf.cleanCsharpApplication",
-                "title": "clean csharp Application",
+                "title": "Clean CSharp Application",
                 "category": "Service Fabric"
             }
         ],

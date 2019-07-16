@@ -27,7 +27,7 @@ export async function activate(context: ExtensionContext) {
     if(files.length&&!fs.existsSync(path.join(root,'vscode-config.json'))){
         window.showInformationMessage("This is a VS project, do you want to initialise it for VS code?","Continue","Cancel").then(choice => {
             if (choice === 'Continue') {
-                openVSproject().then(res => cleanCsharpApplication());
+                openVSproject();
             }
             else if(choice === 'Cancel')
             {
