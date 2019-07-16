@@ -49,7 +49,8 @@ export async function openVSproject() {
     await parseString(csprojdata[i], function (err, result) {
       csprojinfo = result;
     });
-    if(csprojinfo["Project"]["PropertyGroup"]["TargetFramework"]==undefined)
+
+    if(csprojinfo["Project"]["PropertyGroup"][0]["TargetFramework"]==undefined)
     {
       window.showErrorMessage("Full dotnet projects cannot be opened in VS Code");
       return;
@@ -57,7 +58,7 @@ export async function openVSproject() {
     if (csprojinfo["Project"]["ItemGroup"][1] != undefined) {
       interfaceprojpath[i] = csprojinfo["Project"]["ItemGroup"][1]["ProjectReference"][0]["$"]["Include"];
     }
-    var servicemanifestdata;
+  var servicemanifestdata;
     await parseString(fs.readFileSync(path.join(root, serviceProjName[i], "PackageRoot", "ServiceManifest.xml")), function (err, result) {
       servicemanifestdata = result;
     });
