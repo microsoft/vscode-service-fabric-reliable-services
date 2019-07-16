@@ -11,8 +11,8 @@ export async function openVSproject() {
   var x = await getWorkingFolder();
   var files = find.fileSync(/\.sfproj$/, x);
   if (files.length) {
-    var data = fs.readFileSync(files[0]);
-    var isVS = 1;
+  var data = fs.readFileSync(files[0]);
+  var isVS = 1;
   }
   else {
     window.showErrorMessage("This is not a VS project");
