@@ -29,7 +29,6 @@ export async function cleanCsharpApplication() {
                 console.error(err)
             });
         }
-
     }
    
 

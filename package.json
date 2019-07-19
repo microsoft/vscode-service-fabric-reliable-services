@@ -34,7 +34,6 @@
         "onCommand:vscode-sf.removeApplication",
         "onCommand:vscode-sf.upgradeApplication",
         "onCommand:vscode-sf.openVSproject",
-        "onCommand:vscode-sf.cleanCsharpApplication",
         "*"
     ],
     "main": "./out/src/extension",
@@ -84,11 +83,6 @@
                 "command": "vscode-sf.openVSproject",
                 "title": "Initialize VS project for VScode",
                 "category": "Service Fabric"
-            },
-            {
-                "command": "vscode-sf.cleanCsharpApplication",
-                "title": "Clean CSharp Application",
-                "category": "Service Fabric"
             }
         ],
         "menus": {
@@ -123,10 +117,6 @@
                 },
                 {
                     "command": "vscode-sf.openVSproject",
-                    "group": "navigation"
-                },
-                {
-                    "command": "vscode-sf.cleanCsharpApplication",
                     "group": "navigation"
                 }
             ],
