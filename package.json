@@ -2,7 +2,7 @@
     "name": "vscode-service-fabric-reliable-services",
     "displayName": "Service Fabric Reliable Services",
     "description": "Service Fabric Reliable Services extension for VSCode",
-    "version": "0.1.6",
+    "version": "0.1.9",
     "publisher": "ms-azuretools",
     "icon": "media/service-fabric.png",
     "engines": {
@@ -35,7 +35,7 @@
         "onCommand:vscode-sf.upgradeApplication",
         "onCommand:vscode-sf.openVSproject",
         "onCommand:vscode-sf.cleanCsharpApplication",
-        "workspaceContains:*.sfproj"
+        "*"
     ],
     "main": "./out/src/extension",
     "contributes": {
@@ -183,6 +183,7 @@
         "run-async": "^2.0.0",
         "semver": "^5.0.3",
         "strip-ansi": "^3.0.0",
+        "vsce": "^1.65.0",
         "yeoman-environment": "^1.5.2"
     }
 }

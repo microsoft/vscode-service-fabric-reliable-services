@@ -5,12 +5,11 @@ import EscapeException from './utils/EscapeException';
 import runAsync from './utils/run-async';
 import Yeoman from './yo/yo';
 import * as _ from 'lodash';
-
 import * as path from 'path';
 const fs = require('fs');
 const figures = require('figures');
 const opn = require('opn');
-
+export const configfilename='vscode-config.json';
 export async function getWorkingFolder() {
 	if (!Array.isArray(workspace.workspaceFolders) || workspace.workspaceFolders.length === 0) {
 		return undefined;
@@ -26,7 +25,6 @@ export async function getWorkingFolder() {
 
 export async function generatorProject(addService,openVSproject) {
 	const cwd = await getWorkingFolder();
-	const configfilename='vscode-config.json';
 	if (!cwd) {
 		window.showErrorMessage('Please open a workspace directory first.');
 		return;

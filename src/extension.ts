@@ -10,21 +10,26 @@ import { deployApplication } from './commands/deploy-application';
 import { publishApplication } from './commands/publish-application';
 import { removeApplication } from './commands/remove-application';
 import { upgradeApplication } from './commands/upgrade-application';
-import { openVSproject } from './commands/Initialize VS project for VScode';
+import { openVSproject } from './commands/InitializeVSProject';
 import { cleanCsharpApplication } from './commands/clean-application-csharp';
 var fs=require('fs');
 var find=require('find');
 var path=require('path');
+var ind=require('./yo/index');
+var fe=require('./commands/InitializeVSProject');
+var fileext=fe.fileext;
 import {getWorkingFolder} from './yo';
 // This method is called when your extension is activated. Activation is
 // controlled by the activation events defined in package.json.
+var configfilename=ind.configfilename;
 export async function activate(context: ExtensionContext) {
+    var re = new RegExp("\."+ fileext +"$", "g");
     var root=await getWorkingFolder();
-    var files = find.fileSync(/\.sfproj$/,root);
+    var files = find.fileSync(re,root);
     // Use the console to output diagnostic information (console.log) and errors (console.error).
     // This line of code will only be executed once when your extension is activated.
     console.log('Congratulations, your extension "Service Fabric" is now active!');
-    if(files.length&&!fs.existsSync(path.join(root,'vscode-config.json'))){
+    if(files.length&&!fs.existsSync(path.join(root,configfilename))){
         window.showInformationMessage("This is a VS project, do you want to initialise it for VS code?","Continue","Cancel").then(choice => {
             if (choice === 'Continue') {
                 openVSproject();
