@@ -4,6 +4,7 @@ import { win32 } from "path";
 import * as vars from './osdetector';
 import { resolve } from "url";
 
+
 var builScriptExtension;
 var installScriptExtension;
 
@@ -97,7 +98,13 @@ function replaceBuildPath(filePath) {
         if (err) {
             return console.log(err);
         }
+        if(!vars._isWindows){
         var result = data.replace(/\\/g, "/");
+        }
+        else
+        {
+            var result=data;
+        }
 
         fs.writeFile(filePath, result, 'utf8', function (err) {
             if (err) return console.log(err);
