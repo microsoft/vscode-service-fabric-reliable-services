@@ -5,13 +5,12 @@ import EscapeException from './utils/EscapeException';
 import runAsync from './utils/run-async';
 import Yeoman from './yo/yo';
 import * as _ from 'lodash';
-
 import * as path from 'path';
 const fs = require('fs');
 const figures = require('figures');
 const opn = require('opn');
-
-async function getWorkingFolder() {
+export const configfilename='vscode-config.json';
+export async function getWorkingFolder() {
 	if (!Array.isArray(workspace.workspaceFolders) || workspace.workspaceFolders.length === 0) {
 		return undefined;
 	}
@@ -23,18 +22,31 @@ async function getWorkingFolder() {
 	return selectedWkFolder ? selectedWkFolder.uri.fspath : undefined;
 }
 
-export async function generatorProject(addService) {
+
+export async function generatorProject(addService,openVSproject) {
 	const cwd = await getWorkingFolder();
 	if (!cwd) {
 		window.showErrorMessage('Please open a workspace directory first.');
 		return;
+	
 	}
 
-	const yo = new Yeoman({ cwd });
+	const yo = new Yeoman({ cwd,configfilename });
 	let main;
 	let sub;
-
-	const generator = await window.showQuickPick(list(yo));
+	var generator;
+	var root=await getWorkingFolder();
+	
+	if(openVSproject==true||fs.existsSync(path.join(root,configfilename)))
+	{
+		generator= {label: "azuresfcsharp", description: "Azure Service Fabric CSharp app template generator", subGenerators: ["AddService", "app", "CoreCLRStatefulActor","CoreCLRStatefulService","CoreCLRStatelessService","openVSproject"]};
+		list(yo);
+	}
+	else
+	{
+		generator = await window.showQuickPick(list(yo));
+	}
+	
 	if (generator === undefined) {
 		return;
 	}
@@ -43,8 +55,13 @@ export async function generatorProject(addService) {
 	let subGenerator: string;
 	if ((generator as any).subGenerators.length > 1 && addService) {
 		subGenerator = await runSubGenerators((generator as any).subGenerators);
-	} else {
+	} 
+	if (!addService&&!openVSproject){
 		subGenerator = 'app';
+	}
+	if(openVSproject){
+		subGenerator='openVSproject';
+		          
 	}
 
 	if (subGenerator === undefined) {
@@ -59,7 +76,7 @@ export async function generatorProject(addService) {
 		yo.run(`${main}:${sub}`, cwd).then(_p => {
 			afterYo = getAllDirs(cwd);
 			var newApp = _.difference(afterYo, beforeYo);
-			if (newApp.length > 0) {
+			if (newApp.length > 0&&!addService) {
 				openFolder(newApp[0]);
 			}
 		});
@@ -75,6 +92,7 @@ export async function generatorProject(addService) {
 		}
 		window.showErrorMessage(err.message || err);
 	}
+	
 }
 
 function openFolder(folderPath: string) {
@@ -93,9 +111,16 @@ function getAllDirs(folderPath: string) {
 function runSubGenerators(subGenerators: string[]) {
 	const app = `${figures.star} app`;
 	const index = subGenerators.indexOf('app');
+	
 
 	if (index !== -1) {
 		subGenerators.splice(index, 1);
+	}
+
+	const openVSProjectIndex = subGenerators.indexOf('openVSproject');
+
+	if (index != -1) {
+		subGenerators.splice(openVSProjectIndex, 1);
 	}
 
 	return window.showQuickPick(subGenerators)
@@ -107,7 +132,6 @@ function runSubGenerators(subGenerators: string[]) {
 			return choice;
 		});
 }
-
 function list(yo: Yeoman): Promise<QuickPickItem[]> {
 	return new Promise((resolve, reject) => {
 		setImmediate(() => {
@@ -116,7 +140,8 @@ function list(yo: Yeoman): Promise<QuickPickItem[]> {
 					return {
 						label: generator.name.replace(/(^|\/)generator\-/i, '$1') as string,
 						description: generator.description,
-						subGenerators: generator.subGenerators
+						subGenerators: generator.subGenerators,
+
 					};
 				});
 
@@ -138,8 +163,10 @@ function list(yo: Yeoman): Promise<QuickPickItem[]> {
 					|| generator.label === 'azuresfcontainer' 
 					|| generator.label === 'azuresfguest'
 				})
+				
 				resolve(azureGenerators);
 			});
 		});
 	});
 }
+
