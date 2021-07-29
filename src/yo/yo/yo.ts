@@ -92,7 +92,7 @@ export default class Yeoman {
 			generator = generator.slice(prefix.length);
 		}
 
-		return new Promise((resolve, reject) => {
+		return new Promise<void>((resolve, reject) => {
 			Promise.resolve(window.showQuickPick(new Promise((res, rej) => {
 				setImmediate(() => {
 					try {
