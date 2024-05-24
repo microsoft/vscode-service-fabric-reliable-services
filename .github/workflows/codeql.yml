@@ -30,7 +30,14 @@ jobs:
         languages: ${{ matrix.language }}
 
     - name: Autobuild
+      if: ${{ matrix.language = 'javascript' }}
       uses: github/codeql-action/autobuild@v3
+
+    - name: Custom Build
+      if: ${{ matrix.language = 'csharp' }}
+      run: |
+      echo "Run, Build Application using script"
+      ./../../test/TestCSharpApplication/build.cmd
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
