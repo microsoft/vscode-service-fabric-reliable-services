@@ -36,8 +36,8 @@ jobs:
     - name: Custom Build
       if: ${{ matrix.language = 'csharp' }}
       run: |
-      echo "Run, Build Application using script"
-      ./../../test/TestCSharpApplication/build.cmd
+        echo "Run, Build Application using script"
+        ./../../test/TestCSharpApplication/build.cmd
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
