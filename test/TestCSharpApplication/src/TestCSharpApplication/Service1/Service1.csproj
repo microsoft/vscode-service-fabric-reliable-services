@@ -3,7 +3,8 @@
   <PropertyGroup>
     <Description>Stateless Service Application</Description>
     <Authors> </Authors>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.0.3</TargetFramework>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AssemblyName>Service1</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>Service1</PackageId>
